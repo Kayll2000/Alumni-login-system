@@ -1,3 +1,27 @@
+/****************************************************************************************************************************
+* @function:校友管理系统问卷功能子函数
+* @version:v1.0.1
+* @author:chenjunlong
+* @description:Implement the system's questionnaire editing, saving, and publishing functions, as well as answer collection.
+* @github:https://github.com/Kayll2000/Alumni-login-system.git
+* @date:2023.04.06
+* @lmodauthor:chenjunlong
+* @lmoddate:2023.04.06
+*           FUCTION:
+                    1、添加问卷
+                    2、删除问卷
+                    3、修改问卷
+                    4、显示所有问卷
+                    5、显示已发布问卷
+                    6、发布问卷
+                    7、清空已发布问卷
+                    8、清空所有问卷
+                    9、收集用户答案
+                    10、问卷保存到指定文件夹，输出文本文件
+            BUGFIX:
+            MODIFY:后续添加查询指定id问卷功能
+
+****************************************************************************************************************************/
 #include <iostream>
 #include <fstream>
 #include <vector>

@@ -1,3 +1,23 @@
+/****************************************************************************************************************************
+* @function:校友管理系统新闻功能子函数
+* @version:v1.0.1
+* @author:chenjunlong
+* @description:Implement the news editing and publishing functions of the system.
+* @github:https://github.com/Kayll2000/Alumni-login-system.git
+* @date:2023.04.06
+* @lmodauthor:chenjunlong
+* @lmoddate:2023.04.06
+*           FUCTION:
+                    1、添加新闻
+                    2、删除新闻
+                    3、修改新闻
+                    4、查询新闻
+                    5、发布新闻
+                    6、新闻信息保存到指定文件夹，输出文本文件
+            BUGFIX:
+            MODIFY:
+
+****************************************************************************************************************************/
 #include <iostream>
 #include <fstream>
 #include <list>

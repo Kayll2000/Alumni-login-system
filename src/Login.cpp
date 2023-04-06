@@ -1,3 +1,19 @@
+/****************************************************************************************************************************
+* @function:校友管理系统注册登录子函数
+* @version:v1.0.1
+* @author:chenjunlong
+* @description:Realize the registration and login of alumni information and the login of administrators.
+* @github:https://github.com/Kayll2000/Alumni-login-system.git
+* @date:2023.04.06
+* @lmodauthor:chenjunlong
+* @lmoddate:2023.04.06
+*           FUCTION:
+                    1、校友登录入口
+                    2、管理员登录入口&注册校友信息
+            BUGFIX:
+            MODIFY:
+
+****************************************************************************************************************************/
 #include <iostream>
 #include <string>
 #include <vector>
