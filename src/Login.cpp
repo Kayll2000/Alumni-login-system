@@ -216,14 +216,15 @@ void AdminManager::questionfun()
         case 1:addquestion(&var);break;//增加问卷
         case 2:delquestion(&var);break;//删除指定问卷
         case 3:modquestion(&var);break;//修改指定问卷
-        case 4:showquestion(&var);break;//显示所有问卷
-        case 5:showpublish(&var);break;//显示已经发布的问卷
-        case 6:publish(&var);break;//发布问卷
-        case 7:collectanswer(&vat);break;//collectanswer();break;//收集问卷答案【在校友角色中去调用问卷填写并将答案存在answer结构体中】
-        case 8:useranswer(&var,&vat);break;
-        case 9:clearpublished(&var);break;//清空已经发布的额问卷
-        case 10:clearallquestion(&var);break;//清空所有问卷
-        case 11:system("cls");break;//清屏操作
+        case 4:searchquestion(&var);break;
+        case 5:showquestion(&var);break;//显示所有问卷
+        case 6:showpublish(&var);break;//显示已经发布的问卷
+        case 7:publish(&var);break;//发布问卷
+        case 8:collectanswer(&vat);break;//collectanswer();break;//收集问卷答案【在校友角色中去调用问卷填写并将答案存在answer结构体中】
+        case 9:useranswer(&var,&vat);break;
+        case 10:clearpublished(&var);break;//清空已经发布的额问卷
+        case 11:clearallquestion(&var);break;//清空所有问卷
+        case 12:system("cls");break;//清屏操作
         default:system("cls");break;//清屏操作
     }
     cout << "是否退出当前News菜单[Y/N]" << endl;
