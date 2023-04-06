@@ -3,8 +3,8 @@
 // "news.h"
 #define MAX 100 //最多的问卷数
 #define MAXITEM 10//最多的选项个数
-#define QUEFILENAME "./QuestionData/QuestionFILE.txt"//保存问卷信息的路径
-#define ANSWERFILE "./AnswerData/AnswerFILE.txt"
+#define QUEFILENAME "./Debug/QuestionData/QuestionFILE.txt"//保存问卷信息的路径
+#define ANSWERFILE "./Debug/AnswerData/AnswerFILE.txt"
 using namespace std;
 //全局变量
 static int num = 0;// 记录所有问卷的数量

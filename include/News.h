@@ -2,7 +2,7 @@
 #define NEWS_H_INCLUDED
 // "news.h"
 using namespace std;
-#define FILENAME "./NewsData/NewsFILE.txt"    //保存为TXT文本格式
+#define FILENAME "./Debug/NewsData/NewsFILE.txt"    //保存为TXT文本格式
 static int newsnum;//记录新闻条数  static  
 
 class News {//新闻类
