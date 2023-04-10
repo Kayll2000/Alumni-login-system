@@ -141,6 +141,7 @@ void AdminManager::Newsfun()
 {
     int select = 0;
     string exitflag = "";
+    bool quit = false;
         //Flag:
         while(true)
         {
@@ -175,25 +176,36 @@ void AdminManager::Newsfun()
                 case 5:
                     gm.News_show();
                     break;
+                case 6:
+                    quit = true;
+                    break;
                 default:
                     system("cls");
                     break;
             }
-            cout << "是否退出当前News菜单[Y/N]" << endl;
-            cin >> exitflag; 
-            if(exitflag == "Y" || exitflag == "y"){
-        
+            if(quit != false)
+            {
                 system("pause");
                 system("cls");
-  
                 break;
-             }
+            }else{
+                cout << "是否退出当前新闻(News)菜单[Y/N]" << endl;
+                cin >> exitflag; 
+                if(exitflag == "Y" || exitflag == "y"){
+        
+                    system("pause");
+                    system("cls");
+                    break;
+                 }
+            }
         }
 }
 
 void AdminManager::questionfun()
 {
     int myflag;
+    //int quit = 0;
+    bool quit = false;
     string exitflag = "";
     var.qsize = 0;//初始化为 0
     vat.asize = 0;
@@ -225,14 +237,23 @@ void AdminManager::questionfun()
         case 10:clearpublished(&var);break;//清空已经发布的额问卷
         case 11:clearallquestion(&var);break;//清空所有问卷
         case 12:system("cls");break;//清屏操作
+        case 13:quit = true;break;//退出问卷菜单
         default:system("cls");break;//清屏操作
     }
-    cout << "是否退出当前News菜单[Y/N]" << endl;
-    cin >> exitflag; 
-    if(exitflag == "Y" || exitflag == "y"){
+    if(quit != false)
+    {
         system("pause");
         system("cls");
         break;
+
+    }else{
+        cout << "是否退出当前问卷(Question)菜单[Y/N]" << endl;
+        cin >> exitflag; 
+        if(exitflag == "Y" || exitflag == "y"){
+            system("pause");
+            system("cls");
+            break;
+        }
     }
     }
 }
