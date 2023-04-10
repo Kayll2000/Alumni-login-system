@@ -6,12 +6,13 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.06
+* @lmoddate:2023.04.10
 *           FUCTION:
                     1、校友登录入口
                     2、管理员登录入口&注册校友信息
             BUGFIX:
             MODIFY:
+                    1、[2023.04.10]添加在菜单和问卷界面时主动退出当前菜单的选项
 
 ****************************************************************************************************************************/
 #include <iostream>
@@ -140,8 +141,8 @@ void AdminManager::addAdmin(Admin admin) {
 void AdminManager::Newsfun()
 {
     int select = 0;
-    string exitflag = "";
     bool quit = false;
+    string exitflag = "";
         //Flag:
         while(true)
         {
@@ -176,9 +177,6 @@ void AdminManager::Newsfun()
                 case 5:
                     gm.News_show();
                     break;
-                case 6:
-                    quit = true;
-                    break;
                 default:
                     system("cls");
                     break;
@@ -204,7 +202,6 @@ void AdminManager::Newsfun()
 void AdminManager::questionfun()
 {
     int myflag;
-    //int quit = 0;
     bool quit = false;
     string exitflag = "";
     var.qsize = 0;//初始化为 0
@@ -237,7 +234,6 @@ void AdminManager::questionfun()
         case 10:clearpublished(&var);break;//清空已经发布的额问卷
         case 11:clearallquestion(&var);break;//清空所有问卷
         case 12:system("cls");break;//清屏操作
-        case 13:quit = true;break;//退出问卷菜单
         default:system("cls");break;//清屏操作
     }
     if(quit != false)

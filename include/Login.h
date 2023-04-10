@@ -2,9 +2,8 @@
 #define LOGIN_H_INCLUDED
 #include "news.h"
 #include "question.h"
-
-//#include <string>
-//#include <vector>
+#include <string>
+#include <vector>
 using namespace std;
 //"login.h"
 //校友信息
