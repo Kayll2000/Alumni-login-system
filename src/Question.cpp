@@ -6,7 +6,7 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.10
+* @lmoddate:2023.04.11
 *           FUCTION:
                     1、添加问卷
                     2、删除问卷
@@ -19,6 +19,7 @@
                     9、收集用户答案
                     10、问卷保存到指定文件夹，输出文本文件
             BUGFIX:
+                    1、[2023.04.11]修改问卷信息保存的文件夹创建错误的bug。
             MODIFY: 1、[2023.04.06]添加查询指定id问卷功能
                     2、[2023.04.10]修改菜单界面函数
 
@@ -29,7 +30,7 @@
 #include <string>
 #include <algorithm>
 #include <io.h>
-#include <direct.h> 
+#include <direct.h>
 #include "question.h"
 
 using namespace std;
@@ -111,8 +112,8 @@ int Ispublish(QArray *var,int id)//问卷id是否已经发布  未发布返回id
 void saveanswerinfo(Answer *vat ,QArray *var)
 {
     cout << "正在保存答案信息···" << endl;
-    if(_access("AnswerData", 0) == -1)  
-    {   
+    if(_access("AnswerData", 0) == -1)
+    {
         _mkdir("AnswerData");//创建文件夹
     }
     ofstream fo;
@@ -136,10 +137,13 @@ void saveanswerinfo(Answer *vat ,QArray *var)
 void saveinfo(QArray *var)
 {
     cout <<"正在保存信息···"<< endl;
-    
-    if(_access("QuestionData", 0) == -1)  
-    {   
-        _mkdir("QuestionData");//创建文件夹
+    if(_access("Debug", 0) == -1)
+    {
+        _mkdir("Debug");//创建Debug文件夹
+        if(_access("Debug/QuestionData", 0) == -1)
+        {
+            _mkdir("Debug/QuestionData");//创建AlumniData文件夹
+        }
     }
     ofstream fo;
     fo.open(QUEFILENAME,ios::out);//允许输出(写入操作)到流。
@@ -367,7 +371,7 @@ void showpublish(QArray *var)
 void useranswer(QArray *var,Answer *vat)//用户回答问卷
 {
     int myselect,itemsize;
-    bool writeflag = false; 
+    bool writeflag = false;
 
     for(int i = answerflag;i<pnum;i++)
     {
@@ -400,7 +404,7 @@ void useranswer(QArray *var,Answer *vat)//用户回答问卷
     {
         cout << "问卷已经全部填写完毕！或者 问卷未发布！" << endl;
     }
-    saveanswerinfo(vat,var);//保存用户答案 
+    saveanswerinfo(vat,var);//保存用户答案
         system("pause");
         system("cls");
 

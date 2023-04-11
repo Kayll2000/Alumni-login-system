@@ -1,6 +1,8 @@
-#ifndef NEWS_H_INCLUDED
-#define NEWS_H_INCLUDED
+#ifndef NEWS_H
+#define NEWS_H
 // "news.h"
+#include <string>
+#include <vector>
 using namespace std;
 #define FILENAME "./Debug/NewsData/NewsFILE.txt"    //保存为TXT文本格式
 static int newsnum;//记录新闻条数  static  

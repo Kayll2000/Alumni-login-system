@@ -6,7 +6,7 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.10
+* @lmoddate:2023.04.11
 *           FUCTION:
                     1、添加新闻
                     2、删除新闻
@@ -15,8 +15,9 @@
                     5、发布新闻
                     6、新闻信息保存到指定文件夹，输出文本文件
             BUGFIX:
+                    1、[2023.04.11]修复新闻信息保存的文件夹创建错误的bug。
             MODIFY:
-                    1、[2023.04.10]修改菜单界面函数
+                    1、[2023.04.10]修改菜单界面函数。
 
 ****************************************************************************************************************************/
 #include <iostream>
@@ -26,6 +27,7 @@
 #include <string>
 #include<io.h>
 #include<direct.h>
+#include <cstdlib>
 #include "news.h"
 using namespace std;
 
@@ -70,7 +72,7 @@ void GM::Show_menu()
     cout <<"---------------------1、增加新闻信息-----------------------"<< endl;
     cout <<"---------------------2、删除新闻信息------------------------"<< endl;
     cout <<"---------------------3、修改新闻信息------------------------"<< endl;
-    cout <<"---------------------4、查询新闻信息-----------------------"<< endl; 
+    cout <<"---------------------4、查询新闻信息-----------------------"<< endl;
     cout <<"---------------------5、发布所有新闻信息-------------------"<< endl;
     cout <<"---------------------6、退出当前新闻菜单-------------------"<< endl;
     cout <<"-----------------------------------------------------------"<< endl;
@@ -81,11 +83,14 @@ void GM::Save_Info()//保存新闻信息API
 {
 
     cout <<"正在保存信息···"<< endl;
-    
-    if(_access("NewsData", 0) == -1)  
-    {   
-        _mkdir("NewsData");//创建文件夹
-    }  
+    if(_access("Debug", 0) == -1)
+    {
+        _mkdir("Debug");//创建Debug文件夹
+        if(_access("Debug/NewsData", 0) == -1)
+        {
+            _mkdir("Debug/NewsData");//创建AlumniData文件夹
+        }
+    }
     //写入到文件
 
     ofstream fo;
@@ -129,7 +134,7 @@ int GM::IDIsExist(int id)
 void GM::News_add()
 {
     while(true)
-    {   
+    {
         //针对string类型，getline可以接收空格，遇到回车键结束
         int choice,_id;
         string flag;
@@ -163,7 +168,7 @@ void GM::News_add()
                 cout << "输入指令错误，请重新输入！" << endl;
             }
         }
-       
+
         if(flag == "Y" || flag == "y")
         {
             cout << "继续添加第" << newsnum + 1 << "条新闻 >>>" << endl;

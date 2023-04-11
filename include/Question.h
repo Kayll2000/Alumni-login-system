@@ -1,6 +1,8 @@
-#ifndef QUESTION_H_INCLUDED
-#define QUESTION_H_INCLUDED
+#ifndef QUESTION_H
+#define QUESTION_H
 // "news.h"
+#include <string>
+#include <vector>
 #define MAX 100 //最多的问卷数
 #define MAXITEM 10//最多的选项个数
 #define QUEFILENAME "./Debug/QuestionData/QuestionFILE.txt"//保存问卷信息的路径
@@ -49,6 +51,7 @@ extern void modquestion(QArray *var);
 extern void showpublish(QArray *var);
 extern void useranswer(QArray *var,Answer *vat);
 extern void collectanswer(Answer *vat);
+extern void searchquestion(QArray *var);
 extern void test();
 
 #endif

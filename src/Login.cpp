@@ -6,13 +6,14 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.10
+* @lmoddate:2023.04.11
 *           FUCTION:
                     1、校友登录入口
                     2、管理员登录入口&注册校友信息
             BUGFIX:
             MODIFY:
                     1、[2023.04.10]添加在菜单和问卷界面时主动退出当前菜单的选项
+                    2、[2023.04.11]增加校友信息保存功能
 
 ****************************************************************************************************************************/
 #include <iostream>
@@ -21,7 +22,7 @@
 #include <fstream>
 #include<algorithm>
 #include<io.h>
-#include<direct.h> 
+#include<direct.h>
 #include <list>
 #include "login.h"
 #include "news.h"
@@ -68,9 +69,37 @@ void Alumni::setPhone(string phone) {
 void Alumni::setEmail(string email) {
     this->email = email;
 }
+void AlumniManager::savealumniinfo(void){
+    cout <<"正在保存信息···"<< endl;
+    if(_access("Debug", 0) == -1)
+    {
+        _mkdir("Debug");//创建Debug文件夹
+        if(_access("Debug/AlumniData", 0) == -1)
+        {
+            _mkdir("Debug/AlumniData");//创建AlumniData文件夹
+        }
+    }
+    ofstream fo;
+    fo.open(ALUMNIFILE,ios::out);
+    for(int i=0;i<alumni_list.size();i++)
+    {
+        fo << "名字：" << alumni_list[i].getName() << endl
+        << "学号：" << alumni_list[i].getStudentId() << endl
+        << "密码：" << alumni_list[i].getPassword() << endl
+        << "性别：" << alumni_list[i].getGender() << endl
+        << "生日：" << alumni_list[i].getBirthdate() << endl
+        << "电话：" << alumni_list[i].getPhone() << endl
+        << "邮箱：" << alumni_list[i].getEmail() << endl;
+    }
+    fo.close();
+    cout << "请稍后···"  << endl;
+    cout << "校友信息保存成功！" << endl;
+
+}
 
 void AlumniManager::addAlumni(Alumni alumni) {
         alumni_list.push_back(alumni);
+        savealumniinfo();
     }
 bool AlumniManager::login(string student_id, string password) {
 for (int i = 0; i < alumni_list.size(); i++) {
@@ -101,6 +130,7 @@ void AlumniManager::modifyAlumni(Alumni alumni) {
             break;
         }
     }
+    savealumniinfo();
 }
 
 void AlumniManager::deleteAlumni(string student_id) {
@@ -110,6 +140,7 @@ void AlumniManager::deleteAlumni(string student_id) {
             break;
         }
     }
+    savealumniinfo();
 }
 
 Admin::Admin(string username, string password) {
@@ -160,7 +191,7 @@ void AdminManager::Newsfun()
             switch(select)
             {
                 case 0:
-                    system("cls"); 
+                    system("cls");
                     break;
                 case 1:
                     gm.News_add();
@@ -188,9 +219,9 @@ void AdminManager::Newsfun()
                 break;
             }else{
                 cout << "是否退出当前新闻(News)菜单[Y/N]" << endl;
-                cin >> exitflag; 
+                cin >> exitflag;
                 if(exitflag == "Y" || exitflag == "y"){
-        
+
                     system("pause");
                     system("cls");
                     break;
@@ -219,7 +250,7 @@ void AdminManager::questionfun()
         cin.ignore();//EOF位置，接收下一个cin函数
         cin >> myflag;
     }
-    
+
     switch(myflag)
     {
         case 1:addquestion(&var);break;//增加问卷
@@ -244,7 +275,7 @@ void AdminManager::questionfun()
 
     }else{
         cout << "是否退出当前问卷(Question)菜单[Y/N]" << endl;
-        cin >> exitflag; 
+        cin >> exitflag;
         if(exitflag == "Y" || exitflag == "y"){
             system("pause");
             system("cls");

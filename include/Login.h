@@ -1,10 +1,12 @@
-#ifndef LOGIN_H_INCLUDED
-#define LOGIN_H_INCLUDED
+#ifndef LOGIN_H
+#define LOGIN_H
+
 #include "news.h"
 #include "question.h"
 #include <string>
 #include <vector>
 using namespace std;
+#define ALUMNIFILE "./Debug/AlumniData/AlumniFILE.txt"    //保存为TXT文本格式
 //"login.h"
 //校友信息
 class Alumni {
@@ -43,6 +45,7 @@ public:
     void addAlumni(Alumni alumni);
     void modifyAlumni(Alumni alumni);
     void deleteAlumni(string student_id);
+    void savealumniinfo();
 };
 
 class Admin {

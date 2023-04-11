@@ -7,6 +7,7 @@
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
 * @lmoddate:2023.04.06
+* @compile:Compile the environment is Dev-C++(Embarcadero Dev-C++)
 *           FUCTION:
                     1、校友登录
                         	1.1 修改个人信息
