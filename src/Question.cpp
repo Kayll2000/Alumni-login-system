@@ -6,7 +6,7 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.11
+* @lmoddate:2023.04.24
 *           FUCTION:
                     1、添加问卷
                     2、删除问卷
@@ -22,6 +22,7 @@
                     1、[2023.04.11]修改问卷信息保存的文件夹创建错误的bug。
             MODIFY: 1、[2023.04.06]添加查询指定id问卷功能
                     2、[2023.04.10]修改菜单界面函数
+                    3、[2023.04.24]优化UI。
 
 ****************************************************************************************************************************/
 #include <iostream>
@@ -39,19 +40,19 @@ void showquestionmenu()
 {
     cout << "********************************************************" << endl;
     cout << "******************《问卷发布子系统》*********************" << endl;
-    cout << "******************1、增加问卷***************************" << endl;//ok
-    cout << "******************2、删除问卷***************************" << endl;//ok
-    cout << "******************3、修改问卷***************************" << endl;//ok
-     cout << "*****************4、查询问卷*******************************" << endl;//ok
-    cout << "******************5、显示所有问卷***********************" << endl;//ok
-    cout << "******************6、显示已经发布的问卷******************" << endl;//ok
-    cout << "******************7、发布问卷***************************" << endl;//ok
-    cout << "******************8、收集问卷答案***********************" << endl;//ok
-    cout << "******************9、填写问卷***************************" << endl;//ok
-    cout << "******************10、清空已经发布的问卷******************" << endl;//ok
-    cout << "******************11、清空所有问卷***********************" << endl;//ok
-    cout << "******************12、清屏*******************************" << endl;//ok
-    cout << "******************13、退出当前问卷菜单********************" << endl;//ok
+    cout << "******************[1] 增加问卷***************************" << endl;//ok
+    cout << "******************[2] 删除问卷***************************" << endl;//ok
+    cout << "******************[3] 修改问卷***************************" << endl;//ok
+     cout << "*****************[4] 查询问卷*******************************" << endl;//ok
+    cout << "******************[5] 显示所有问卷***********************" << endl;//ok
+    cout << "******************[6] 显示已经发布的问卷******************" << endl;//ok
+    cout << "******************[7] 发布问卷***************************" << endl;//ok
+    cout << "******************[8] 收集问卷答案***********************" << endl;//ok
+    cout << "******************[9] 填写问卷***************************" << endl;//ok
+    cout << "******************[10] 清空已经发布的问卷******************" << endl;//ok
+    cout << "******************[11] 清空所有问卷***********************" << endl;//ok
+    cout << "******************[12] 清屏*******************************" << endl;//ok
+    cout << "******************[13] 退出当前问卷菜单********************" << endl;//ok
     cout << "********************************************************" << endl;
 }
 
@@ -120,11 +121,11 @@ void saveanswerinfo(Answer *vat ,QArray *var)
     fo.open(ANSWERFILE,ios::out);
     for(int i=0;i<answerflag;i++)
     {
-        fo << "问卷ID:" << i+1 << endl
-        << "问卷标题：" << var->parray[i].title << endl;
+        fo << "问卷ID[" << i+1 << "]" << endl
+        << "问卷标题{" << var->parray[i].title << "}" << endl;
         for(int j=0;j<var->parray[i].items.size() ;j++)
         {
-            fo << "选项" << j+1 <<": " << var->parray[i].items[j] << endl;
+            fo << "选项[" << j+1 <<"]: " << var->parray[i].items[j] << endl;
         }
 
         fo << "问卷答案：" << vat->results[i] << endl;
@@ -149,11 +150,11 @@ void saveinfo(QArray *var)
     fo.open(QUEFILENAME,ios::out);//允许输出(写入操作)到流。
     for(int i = 0;i < num; ++i)
     {
-        fo << "问卷ID:" << var ->qarray[i].id << endl
-        << "问卷标题：" << var->qarray[i].title << endl;
+        fo << "问卷ID[" << var ->qarray[i].id  << "]" << endl
+        << "问卷标题{" << var->qarray[i].title << "}" << endl;
             for(int j=0;j<var->qarray[i].items.size();j++)
             {
-                fo << "选项" << j+1 <<": " << var->qarray[i].items[j] << endl;
+                fo << "选项[" << j+1 <<"]: " << var->qarray[i].items[j] << endl;
             }
             fo << endl;
     }
@@ -264,7 +265,7 @@ void addquestion(QArray *var)
         }
         if(flag == "Y" ||flag == "y")
         {
-            cout << "继续添加第" << num + 1 << "张问卷" << endl;
+            cout << "继续添加第[" << num + 1 << "]张问卷" << endl;
         }else{
             break;
         }
@@ -298,7 +299,7 @@ void delquestion(QArray *var)//删除指定问卷
         var->qsize--;
     }
     num = num - 1;
-    cout << "问卷ID为" << del_id << "的问卷删除成功！" << endl;
+    cout << "问卷ID为[" << del_id << "]的问卷删除成功！" << endl;
     saveinfo(var);
     system("pause");
     system("cls");
@@ -354,11 +355,11 @@ void showpublish(QArray *var)
     cout << "《已经发布的问卷》" << endl;
     for(int i = 0;i<pnum;i++)
     {
-        cout << "问卷编号：" << var->parray[i].id << endl;
-        cout << "问卷标题：" << var->parray[i].title << endl;
+        cout << "问卷编号[" << var->parray[i].id << "]" << endl;
+        cout << "问卷标题[" << var->parray[i].title << "]" << endl;
         for(int j=0;j<var->parray[i].items.size();j++)
         {
-            cout << "选项"<<j+1<<"："  << var->parray[i].items[j] << endl;
+            cout << "选项["<<j+1<<"]："  << var->parray[i].items[j] << endl;
         }
         cout << endl;
     }
@@ -375,7 +376,7 @@ void useranswer(QArray *var,Answer *vat)//用户回答问卷
 
     for(int i = answerflag;i<pnum;i++)
     {
-        cout << "问卷编号：" << var->parray[i].id << endl;
+        cout << "问卷编号[" << var->parray[i].id << "]" << endl;
         cout << "问卷标题：" << var->parray[i].title << endl;
         for(int j=0;j<var->parray[i].items.size();j++)
         {
@@ -411,7 +412,7 @@ void useranswer(QArray *var,Answer *vat)//用户回答问卷
 }
 void collectanswer(Answer *vat)
 {
-    cout << "收集问卷答案test!" << endl;
+    //cout << "收集问卷答案test!" << endl;
     cout << "问卷填写数量：" << vat->asize << endl;
     for(int i = 0;i < answerflag;i++)
     {
@@ -441,7 +442,7 @@ void searchquestion(QArray *var)//需要测试
         cout << "问卷标题：" << var->qarray[fid].title << endl;
         for(int j=0;j<var->qarray[fid].items.size();j++)
         {
-            cout << "选项"<<j+1<<"："  << var->qarray[fid].items[j] << endl;
+            cout << "选项["<<j+1<<"]："  << var->qarray[fid].items[j] << endl;
         }
         cout << endl;
     }else{
