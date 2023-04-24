@@ -24,7 +24,7 @@
 	                        2.6 问卷功能
 	                        2.7 退出登录
             BUGFIX:
-            MODIFY:[2023.04.24]增加主函数登录界面输入的容错性，优化主界面。
+            MODIFY:[2023.04.24]增加主函数登录界面输入的容错性，优化主界面，优化UI。
 
 *
 ****************************************************************************************************************************/
@@ -48,7 +48,7 @@ int main()
     AlumniManager alumni_manager;
     AdminManager admin_manager;
 
-    Admin admin("admin", "admin");
+    Admin admin("admin", "1024");//管理员登录账号及密码
     admin_manager.addAdmin(admin);
 
     while (true) {
@@ -76,11 +76,11 @@ int main()
                     Alumni* alumni = alumni_manager.getAlumni(student_id);
                     cout << "欢迎您，" << alumni->getName() << "！" << endl;
                     cout << "请选择操作：" << endl;
-                    cout << "1. 修改个人信息" << endl;
-                    cout << "2. 查看其他校友信息" << endl;
-                    cout << "3. 填写问卷" << endl;
-                    cout << "4. 查看新闻" << endl;
-                    cout << "5. 退出登录" << endl;
+                    cout << "[1] 修改个人信息" << endl;
+                    cout << "[2] 查看其他校友信息" << endl;
+                    cout << "[3] 填写问卷" << endl;
+                    cout << "[4] 查看新闻" << endl;
+                    cout << "[5] 退出登录" << endl;
                     cin >> choice;
                     if (choice == 1) {
                         cout << "请输入新密码、联系电话和电子邮件：" << endl;
@@ -144,13 +144,13 @@ int main()
             if (admin_manager.login(username, password)) {
                 while (true) {
                     cout << "请选择操作：" << endl;
-                    cout << "1. 查看校友列表" << endl;
-                    cout << "2. 添加校友信息" << endl;
-                    cout << "3. 修改校友信息" << endl;
-                    cout << "4. 删除校友信息" << endl;
-                    cout << "5. 新闻功能" << endl;
-                    cout << "6. 问卷功能" << endl;
-                    cout << "7. 退出登录" << endl;
+                    cout << "[1] 查看校友列表" << endl;
+                    cout << "[2] 添加校友信息" << endl;
+                    cout << "[3] 修改校友信息" << endl;
+                    cout << "[4] 删除校友信息" << endl;
+                    cout << "[5] 新闻功能" << endl;
+                    cout << "[6] 问卷功能" << endl;
+                    cout << "[7] 退出登录" << endl;
                     cin >> choice;
                     if (choice == 1) {
                         vector<Alumni> alumni_list = alumni_manager.getAlumniList();

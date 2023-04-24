@@ -16,6 +16,7 @@
                     6、新闻信息保存到指定文件夹，输出文本文件
             BUGFIX:
                     1、[2023.04.11]修复新闻信息保存的文件夹创建错误的bug。
+                    2、[2023.04.24]修复当使用问卷后再使用新闻功能时，即创建了Debug文件夹后，新闻功能将不会创建对应的文件夹NewsData的bug。
             MODIFY:
                     1、[2023.04.10]修改菜单界面函数。
                     2、[2023.04.24]优化UI。
@@ -87,10 +88,10 @@ void GM::Save_Info()//保存新闻信息API
     if(_access("Debug", 0) == -1)
     {
         _mkdir("Debug");//创建Debug文件夹
-        if(_access("Debug/NewsData", 0) == -1)
-        {
-            _mkdir("Debug/NewsData");//创建AlumniData文件夹
-        }
+    }
+    if(_access("Debug/NewsData", 0) == -1)
+    {
+        _mkdir("Debug/NewsData");//创建AlumniData文件夹
     }
     //写入到文件
 

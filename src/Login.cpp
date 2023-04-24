@@ -10,7 +10,7 @@
 *           FUCTION:
                     1、校友登录入口
                     2、管理员登录入口&注册校友信息
-            BUGFIX:
+            BUGFIX: 1、修复了当使用新闻或者问卷功能保存信息时，即Debug文件夹已经创建情况下，不会创建AlumniData文件夹来保存校友信息的bug。
             MODIFY:
                     1、[2023.04.10]添加在菜单和问卷界面时主动退出当前菜单的选项
                     2、[2023.04.11]增加校友信息保存功能
@@ -74,10 +74,10 @@ void AlumniManager::savealumniinfo(void){
     if(_access("Debug", 0) == -1)
     {
         _mkdir("Debug");//创建Debug文件夹
-        if(_access("Debug/AlumniData", 0) == -1)
-        {
-            _mkdir("Debug/AlumniData");//创建AlumniData文件夹
-        }
+    }
+    if(_access("Debug/AlumniData", 0) == -1)
+    {
+        _mkdir("Debug/AlumniData");//创建AlumniData文件夹
     }
     ofstream fo;
     fo.open(ALUMNIFILE,ios::out);

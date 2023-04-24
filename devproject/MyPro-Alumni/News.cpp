@@ -6,7 +6,7 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.11
+* @lmoddate:2023.04.24
 *           FUCTION:
                     1、添加新闻
                     2、删除新闻
@@ -16,8 +16,10 @@
                     6、新闻信息保存到指定文件夹，输出文本文件
             BUGFIX:
                     1、[2023.04.11]修复新闻信息保存的文件夹创建错误的bug。
+                    2、[2023.04.24]修复当使用问卷后再使用新闻功能时，即创建了Debug文件夹后，新闻功能将不会创建对应的文件夹NewsData的bug。
             MODIFY:
                     1、[2023.04.10]修改菜单界面函数。
+                    2、[2023.04.24]优化UI。
 
 ****************************************************************************************************************************/
 #include <iostream>
@@ -68,13 +70,13 @@ void GM::Show_menu()
 {
     cout <<"-----------------------------------------------------------"<< endl;
     cout <<"----------------------欢迎使用新闻发布功能------------------"<< endl;
-    cout <<"---------------------0、清屏-------------------------------"<< endl;
-    cout <<"---------------------1、增加新闻信息-----------------------"<< endl;
-    cout <<"---------------------2、删除新闻信息------------------------"<< endl;
-    cout <<"---------------------3、修改新闻信息------------------------"<< endl;
-    cout <<"---------------------4、查询新闻信息-----------------------"<< endl;
-    cout <<"---------------------5、发布所有新闻信息-------------------"<< endl;
-    cout <<"---------------------6、退出当前新闻菜单-------------------"<< endl;
+    cout <<"---------------------[0] 清屏-------------------------------"<< endl;
+    cout <<"---------------------[1] 增加新闻信息-----------------------"<< endl;
+    cout <<"---------------------[2] 删除新闻信息------------------------"<< endl;
+    cout <<"---------------------[3] 修改新闻信息------------------------"<< endl;
+    cout <<"---------------------[4] 查询新闻信息-----------------------"<< endl;
+    cout <<"---------------------[5] 发布所有新闻信息-------------------"<< endl;
+    cout <<"---------------------[6] 退出当前新闻菜单-------------------"<< endl;
     cout <<"-----------------------------------------------------------"<< endl;
     cout << endl;
 }
@@ -86,10 +88,10 @@ void GM::Save_Info()//保存新闻信息API
     if(_access("Debug", 0) == -1)
     {
         _mkdir("Debug");//创建Debug文件夹
-        if(_access("Debug/NewsData", 0) == -1)
-        {
-            _mkdir("Debug/NewsData");//创建AlumniData文件夹
-        }
+    }
+    if(_access("Debug/NewsData", 0) == -1)
+    {
+        _mkdir("Debug/NewsData");//创建AlumniData文件夹
     }
     //写入到文件
 
@@ -105,11 +107,19 @@ void GM::Save_Info()//保存新闻信息API
     fo.open(FILENAME,ios::out);//允许输出(写入操作)到流。
     for(int i = 0;i < this -> News_Array -> size();++i)
     {
-        fo << "ID:" << this -> News_Array -> at(i) -> id << endl
-        << "Title:" <<this -> News_Array -> at(i) -> title << endl
-        << "Content:" << this -> News_Array -> at(i) -> content <<endl
+        /*
+        fo << "新闻ID[" << this -> News_Array -> at(i) -> id << "]" << endl
+        << "新闻Title:" <<this -> News_Array -> at(i) -> title << endl
+        << "新闻Content:" << this -> News_Array -> at(i) -> content <<endl
         << "Author:" << this -> News_Array-> at(i) -> author <<endl
         << "Date" << this -> News_Array-> at(i) -> date << endl;
+        */
+        fo << "新闻ID[" << this -> News_Array -> at(i) -> id << "]" << endl
+        << "新闻标题：" <<this -> News_Array -> at(i) -> title << endl
+        << "新闻内容：" << this -> News_Array -> at(i) -> content <<endl
+        << "作者：" << this -> News_Array-> at(i) -> author <<endl
+        << "日期：" << this -> News_Array-> at(i) -> date << endl;
+
     }
     fo.close();
     cout << "保存成功！" << endl;
@@ -240,10 +250,10 @@ void GM::News_find()
     int index = IDIsExist(find_id);
     if(index != -1)
     {
-        cout <<"查询成功，该条新闻信息如下："<< endl;
+        cout <<"查询成功，该条新闻信息如下 >>>"<< endl;
         this -> News_Array -> at(index) -> News_display();//显示信息
     }else{
-        cout <<"查无此条新闻！"<< endl;
+        cout <<"ERROR!查无此条新闻！"<< endl;
     }
     system("pause");
     system("cls");
@@ -252,14 +262,14 @@ void GM::News_find()
 void GM::News_show()
 {
     if(newsnum != 0){
-        cout <<"新闻条数为：" << this -> News_Array -> size() << endl;
+        cout <<"新闻条数为：" << this -> News_Array -> size() << "条！" << endl;
         //cout <<"新闻条数为：" << newsnum << endl; //这个也可以显示新闻条数
         for(int i = 0;i < this ->News_Array -> size();++i)
         {
             this -> News_Array -> at(i) ->News_display();
         }
     }else{
-        cout << "目前暂无新闻！" << endl;
+        cout << "目前暂无新闻！>>>" << endl;
     }
     system("pause");
     system("cls");

@@ -4,8 +4,8 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = MyPro-Alumni/global.o MyPro-Alumni/login.o MyPro-Alumni/main.o MyPro-Alumni/News.o MyPro-Alumni/Question.o
-LINKOBJ  = MyPro-Alumni/global.o MyPro-Alumni/login.o MyPro-Alumni/main.o MyPro-Alumni/News.o MyPro-Alumni/Question.o
+OBJ      = MyPro-Alumni/global.o MyPro-Alumni/login.o MyPro-Alumni/main.o MyPro-Alumni/Question.o MyPro-Alumni/News.o
+LINKOBJ  = MyPro-Alumni/global.o MyPro-Alumni/login.o MyPro-Alumni/main.o MyPro-Alumni/Question.o MyPro-Alumni/News.o
 LIBS     = -L"E:/new-2023/Dev-Cpp/TDM-GCC-64/lib" -L"E:/new-2023/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib" -static-libgcc -pg
 INCS     = -I"E:/new-2023/Dev-Cpp/TDM-GCC-64/include" -I"E:/new-2023/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"E:/new-2023/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
 CXXINCS  = -I"E:/new-2023/Dev-Cpp/TDM-GCC-64/include" -I"E:/new-2023/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"E:/new-2023/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"E:/new-2023/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
@@ -33,8 +33,8 @@ MyPro-Alumni/login.o: MyPro-Alumni/login.cpp
 MyPro-Alumni/main.o: MyPro-Alumni/main.cpp
 	$(CPP) -c MyPro-Alumni/main.cpp -o MyPro-Alumni/main.o $(CXXFLAGS)
 
-MyPro-Alumni/News.o: MyPro-Alumni/News.cpp
-	$(CPP) -c MyPro-Alumni/News.cpp -o MyPro-Alumni/News.o $(CXXFLAGS)
-
 MyPro-Alumni/Question.o: MyPro-Alumni/Question.cpp
 	$(CPP) -c MyPro-Alumni/Question.cpp -o MyPro-Alumni/Question.o $(CXXFLAGS)
+
+MyPro-Alumni/News.o: MyPro-Alumni/News.cpp
+	$(CPP) -c MyPro-Alumni/News.cpp -o MyPro-Alumni/News.o $(CXXFLAGS)
