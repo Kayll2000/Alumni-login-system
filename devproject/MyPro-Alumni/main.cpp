@@ -6,7 +6,7 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.06
+* @lmoddate:2023.04.24
 * @compile:Compile the environment is Dev-C++(Embarcadero Dev-C++)
 *           FUCTION:
                     1、校友登录
@@ -24,7 +24,7 @@
 	                        2.6 问卷功能
 	                        2.7 退出登录
             BUGFIX:
-            MODIFY:
+            MODIFY:[2023.04.24]增加主函数登录界面输入的容错性，优化主界面。
 
 *
 ****************************************************************************************************************************/
@@ -52,11 +52,21 @@ int main()
     admin_manager.addAdmin(admin);
 
     while (true) {
-        cout << "请选择登录身份：" << endl;
-        cout << "1. 校友" << endl;
-        cout << "2. 管理员" << endl;
+        cout << ">>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+        cout << ">>> 请选择登录身份 >>>" << endl;
+        cout << ">>> 1. 校友 >>>"  << endl;
+        cout << ">>> 2. 管理员 >>>" << endl;
+        cout << ">>>>>>>>>>>>>>>>>>>>>>>>" << endl;
         int choice;
         cin >> choice;
+        while(cin.fail())//解决 当输入的choice非数字时导致程序奔溃
+        {
+            cin.clear();//清除cin的错误信息
+            cin.ignore();//忽略掉缓冲区的内容,置于EOF位置
+            cout << "请输入整数: \t";
+            cin.ignore();//EOF位置，接收下一个cin函数
+            cin >> choice;
+        }
         if (choice == 1) {
             cout << "请输入学号和密码：" << endl;
             string student_id, password;
