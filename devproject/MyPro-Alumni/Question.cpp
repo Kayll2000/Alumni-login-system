@@ -6,7 +6,7 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.24
+* @lmoddate:2023.04.25
 *           FUCTION:
                     1、添加问卷
                     2、删除问卷
@@ -25,6 +25,8 @@
             MODIFY: 1、[2023.04.06]添加查询指定id问卷功能
                     2、[2023.04.10]修改菜单界面函数
                     3、[2023.04.24]优化UI。
+                    4、[2023.04.25]增加问卷信息统计（问卷总数以及每个问卷的选项数），将文件保存发送改为追加写入（ios::app）。
+                    5、[2023.04.25]增加读取问卷信息的API。
 
 ****************************************************************************************************************************/
 #include <iostream>
@@ -58,6 +60,40 @@ void showquestionmenu()
     cout << "********************************************************" << endl;
 }
 
+void readdata()//读取问卷信息——>>> 问卷总数 +  每条问卷对应的选项个数
+{
+    
+    ifstream infile(QALLDATA);//读取问卷个数以及每个问卷对应的选项个数
+    if (infile.good())
+    {
+        cout << "文件存在" << endl;
+        if (!infile.is_open()) {
+       cout << "Error opening file" << endl;
+       return;
+       }
+       if (infile.is_open()) {
+        int tnum;
+        int questid = 1;//debug 参数
+        string line; //保存读入的每一行
+        getline(infile,line);//line 是 问卷总数
+        qdatanum = stoi(line);//问卷总数，将string 转为 int
+        cout << "问卷总数："<< qdatanum << "条" << endl;
+        while (infile >> tnum) {
+           cout << "问卷[" << questid << "]" <<"的选项个数为" << tnum << endl; //debug
+           itemnum.push_back(tnum);
+           questid++;
+       }
+        infile.close();
+        } else {
+        cout << "Failed to open file for reading." << endl;
+        return;
+        }
+    }
+    else
+    {
+        cout << "文件不存在" << endl;
+    }
+}
 void showquestion(QArray *var)//显示所有问卷及选项
 {
     //cout <<"qsize = " <<var->qsize << endl;//debug
@@ -120,7 +156,7 @@ void saveanswerinfo(Answer *vat ,QArray *var)
         _mkdir("AnswerData");//创建文件夹
     }
     ofstream fo;
-    fo.open(ANSWERFILE,ios::out);
+    fo.open(ANSWERFILE,ios::app);
     for(int i=0;i<answerflag;i++)
     {
         fo << "问卷ID[" << i+1 << "]" << endl
@@ -136,6 +172,22 @@ void saveanswerinfo(Answer *vat ,QArray *var)
     fo.close();
     cout << "保存成功！" << endl;
 }
+void savequalldata(QArray *var)
+{
+    if(_access("Debug/QuestionALLNUMData", 0) == -1)
+    {
+        _mkdir("Debug/QuestionALLNUMData");//创建QuestionALLNUMData文件夹,保存问卷个数以及每个问卷的选项个数
+    }
+    ofstream qfo;
+    qfo.open(QALLDATA,ios::out);//这里需要覆盖写入
+    qfo << num << endl;//所有问卷数量
+    for(int j = 0;j < num; ++j)
+    {
+        qfo << var->qarray[j].qunum << " ";
+    }
+    qfo.close();
+    cout << "数据存储成功！" << endl;
+}
 
 void saveinfo(QArray *var)
 {
@@ -149,7 +201,7 @@ void saveinfo(QArray *var)
         _mkdir("Debug/QuestionData");//创建AlumniData文件夹
     }
     ofstream fo;
-    fo.open(QUEFILENAME,ios::out);//允许输出(写入操作)到流。
+    fo.open(QUEFILENAME,ios::app);//允许输出(写入操作)到流。
     for(int i = 0;i < num; ++i)
     {
         fo << "问卷ID[" << var ->qarray[i].id  << "]" << endl
@@ -161,6 +213,7 @@ void saveinfo(QArray *var)
             fo << endl;
     }
     fo.close();
+    savequalldata(var);
     cout << "保存成功！" << endl;
 }
 
@@ -246,6 +299,7 @@ void addquestion(QArray *var)
         cin.ignore();//EOF位置，接收下一个cin函数
         cin>>_nums;
         }
+        var->qarray[num].qunum = _nums;
         for(int i=0;i<_nums;i++)
         {
         cout << "输入选项"<<i+1<<"：" << endl;

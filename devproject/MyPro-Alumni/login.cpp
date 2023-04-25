@@ -6,7 +6,7 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.11
+* @lmoddate:2023.04.25
 *           FUCTION:
                     1、校友登录入口
                     2、管理员登录入口&注册校友信息
@@ -14,6 +14,7 @@
             MODIFY:
                     1、[2023.04.10]添加在菜单和问卷界面时主动退出当前菜单的选项
                     2、[2023.04.11]增加校友信息保存功能
+                    3、[2023.04.25]将文件保存发送改为追加写入（ios::app）。
 
 ****************************************************************************************************************************/
 #include <iostream>
@@ -265,6 +266,8 @@ void AdminManager::questionfun()
         case 10:clearpublished(&var);break;//清空已经发布的额问卷
         case 11:clearallquestion(&var);break;//清空所有问卷
         case 12:system("cls");break;//清屏操作
+        case 13:break;
+        case 14:readdata();break;
         default:system("cls");break;//清屏操作
     }
     if(quit != false)

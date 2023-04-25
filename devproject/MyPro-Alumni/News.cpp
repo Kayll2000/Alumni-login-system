@@ -6,7 +6,7 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.24
+* @lmoddate:2023.04.25
 *           FUCTION:
                     1、添加新闻
                     2、删除新闻
@@ -20,6 +20,7 @@
             MODIFY:
                     1、[2023.04.10]修改菜单界面函数。
                     2、[2023.04.24]优化UI。
+                    3、[2023.04.25]将文件保存发送改为追加写入（ios::app）。
 
 ****************************************************************************************************************************/
 #include <iostream>
@@ -104,7 +105,7 @@ void GM::Save_Info()//保存新闻信息API
     ch = str.at(0);
     cout<<ch;   //ch=='1';
     */
-    fo.open(FILENAME,ios::out);//允许输出(写入操作)到流。
+    fo.open(FILENAME,ios::app);//允许输出(写入操作)到流。
     for(int i = 0;i < this -> News_Array -> size();++i)
     {
         /*
