@@ -268,6 +268,7 @@ void AdminManager::questionfun()
         case 12:system("cls");break;//清屏操作
         case 13:break;
         case 14:readdata();break;
+        case 15:questioninit(&var);break;
         default:system("cls");break;//清屏操作
     }
     if(quit != false)

@@ -5,7 +5,9 @@
 #include <vector>
 #define MAX 100 //最多的问卷数
 #define MAXITEM 10//最多的选项个数
+#define DEBUG false//true
 #define QUEFILENAME "./Debug/QuestionData/QuestionFILE.txt"//保存问卷信息的路径
+#define QUEFILETOREAD "./Debug/QuestionData/QuestionToRead.txt"//保存问卷信息(读的文件)的路径
 #define ANSWERFILE "./Debug/AnswerData/AnswerFILE.txt"//保存问卷答案路径
 #define QALLDATA "./Debug/QuestionALLNUMData/Qalldata.txt"//保存问卷个数以及选项个数路径
 
@@ -41,6 +43,12 @@ struct Answer
     // string content;//填写问卷答案内容
 };
 
+struct QDATA {//read
+    int Qid;
+    string Qtitle;
+    vector<string> reitem;
+};
+
 extern void showquestionmenu();
 extern void showquestion(QArray *var);
 extern int IsidExit(QArray *var,int id);
@@ -58,6 +66,7 @@ extern void useranswer(QArray *var,Answer *vat);
 extern void collectanswer(Answer *vat);
 extern void searchquestion(QArray *var);
 extern  void readdata();
+extern void questioninit(QArray *var);
 extern void test();
 
 #endif
