@@ -6,7 +6,7 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.25
+* @lmoddate:2023.04.26
 *           FUCTION:
                     1、添加问卷
                     2、删除问卷
@@ -22,11 +22,13 @@
                     1、[2023.04.11]修复问卷信息保存的文件夹创建错误的bug。
                     2、[2023.04.24]修复查询1号问卷时内容为空，当有2个及以上问卷时，查询1号问卷显示的是后一个问卷内容的bug。
                     3、[2023.04.24]修复当使用新闻后再使用问卷功能时，即创建了Debug文件夹后，新闻功能将不会创建对应的文件夹QuestionData的bug。
+                    4、[2023.04.26]修复读取问卷数据报错的bug。
             MODIFY: 1、[2023.04.06]添加查询指定id问卷功能
                     2、[2023.04.10]修改菜单界面函数
                     3、[2023.04.24]优化UI。
                     4、[2023.04.25]增加问卷信息统计（问卷总数以及每个问卷的选项数），将文件保存发送改为追加写入（ios::app）。
                     5、[2023.04.25]增加读取问卷信息的API。
+                    6、[2023.04.26]完善问卷数据的读取的API并增加问卷数据初始化功能。
 
 ****************************************************************************************************************************/
 #include <iostream>
@@ -35,6 +37,8 @@
 #include <string>
 #include <algorithm>
 #include <io.h>
+#include <ctype.h>
+#include <typeinfo>
 #include <direct.h>
 #include "question.h"
 
@@ -57,12 +61,12 @@ void showquestionmenu()
     cout << "******************[11] 清空所有问卷**********************" << endl;//ok
     cout << "******************[12] 清屏******************************" << endl;//ok
     cout << "******************[13] 退出当前问卷菜单******************" << endl;//ok
+    cout << "******************[14] 初始化系统问卷数据*****************" << endl;//ok
     cout << "********************************************************" << endl;
 }
 
 void readdata()//读取问卷信息——>>> 问卷总数 +  每条问卷对应的选项个数
 {
-    
     ifstream infile(QALLDATA);//读取问卷个数以及每个问卷对应的选项个数
     if (infile.good())
     {
@@ -77,6 +81,7 @@ void readdata()//读取问卷信息——>>> 问卷总数 +  每条问卷对应�
         string line; //保存读入的每一行
         getline(infile,line);//line 是 问卷总数
         qdatanum = stoi(line);//问卷总数，将string 转为 int
+        //cout << "是否为数字："  << isdigit(qdatanum)  << endl;
         cout << "问卷总数："<< qdatanum << "条" << endl;
         while (infile >> tnum) {
            cout << "问卷[" << questid << "]" <<"的选项个数为" << tnum << endl; //debug
@@ -94,20 +99,91 @@ void readdata()//读取问卷信息——>>> 问卷总数 +  每条问卷对应�
         cout << "文件不存在" << endl;
     }
 }
+void questioninit(QArray *var)
+{
+    readdata();
+    ifstream infile(QUEFILETOREAD);
+    if (infile.good())
+    {
+        cout << "文件存在" << endl;
+        num = qdatanum;//init 问卷总数
+        QDATA qdataarr[20];
+        if (infile.is_open()) {
+            string line;
+            int i = 0;
+        while (getline(infile, line)) {
+        if (i >= qdatanum) {
+            break; // 结构体数组已满，退出循环
+        }
+            //当问卷总数超过10时需要再加处理
+        for(i;i<qdatanum;i++)//标题和id
+            {
+                int tt = stoi(line);
+                /*debug*/
+        #if DEBUG
+            if (typeid(tt) == typeid(int)) {
+                cout << "tt is an integer." << endl;
+            } else {
+                cout << "tt is not an integer." << endl;
+            }
+        #endif
+                qdataarr[i].Qid = tt;
+                getline(infile, line); // 读取下一行
+                qdataarr[i].Qtitle = line;//line.substr();
+                getline(infile, line); // 读取下一行
+                for(int j = 0;j<itemnum[i];j++)//选项
+                {
+                    qdataarr[i].reitem.push_back(line); //= line;
+                    getline(infile, line); // 读取下一行
+                }
+            }
+        //Init
+        for(int k = 0;k < qdatanum;k++)
+        {
+            cout << "qid :" << qdataarr[k].Qid << endl;
+            cout << "qtitle:" << qdataarr[k].Qtitle << endl;
+            var ->qarray[k].id = qdataarr[k].Qid;
+            var->qarray[k].title = qdataarr[k].Qtitle;
+            for(int w = 0;w<itemnum[k];w++)//选项
+            {
+                cout << "选项" <<  w+1 << "为：" << qdataarr[k].reitem[w] << endl;
+                var->qarray[k].items.push_back(qdataarr[k].reitem[w]);// =  qdataarr[k].reitem[w];
+            } 
+        }
+        cout << "数据初始化成功！" << endl;
+
+    }
+        infile.close();
+        } else {
+        cout << "Failed to open file for reading." << endl;
+        return;
+        }
+
+    }else{
+        cout << "文件不存在！" << endl;
+    }
+}
 void showquestion(QArray *var)//显示所有问卷及选项
 {
     //cout <<"qsize = " <<var->qsize << endl;//debug
     cout << endl;
-    cout << "《所有问卷》" << endl;
-    for(int i = 0;i<var->qsize;i++)
+    cout << "<<<所有问卷>>>" << endl;
+    cout << "总问卷条数为：" << num << endl;
+    if(num > 0)
     {
-        cout << "问卷编号：" << var->qarray[i].id << endl;
-        cout << "问卷标题：" << var->qarray[i].title << endl;
-        for(int j=0;j<var->qarray[i].items.size();j++)
+        // for(int i = 0;i<var->qsize;i++)
+        for(int i = 0;i<num;i++)
         {
-            cout << "选项"<<j+1<<"："  << var->qarray[i].items[j] << endl;
+            cout << "问卷编号：" << var->qarray[i].id << endl;
+            cout << "问卷标题：" << var->qarray[i].title << endl;
+            for(int j=0;j<var->qarray[i].items.size();j++)
+            {
+                cout << "选项"<<j+1<<"："  << var->qarray[i].items[j] << endl;
+            }
+                cout << endl;
         }
-        cout << endl;
+    }else{
+        cout << "问卷为空！" << endl;
     }
     system("pause");
     system("cls");
@@ -189,6 +265,31 @@ void savequalldata(QArray *var)
     cout << "数据存储成功！" << endl;
 }
 
+void savetoread(QArray *var)
+{
+    if(_access("Debug", 0) == -1)
+    {
+        _mkdir("Debug");//创建Debug文件夹
+    }
+    if(_access("Debug/QuestionData", 0) == -1)
+    {
+        _mkdir("Debug/QuestionData");//创建AlumniData文件夹
+    }
+    ofstream _fo;
+    _fo.open(QUEFILETOREAD,ios::app);
+    for(int j = 0;j < num; ++j)
+    {
+        _fo << var ->qarray[j].id << endl
+        <<var->qarray[j].title << endl;
+            for(int k=0;k<var->qarray[j].items.size();k++)
+            {
+                _fo <<var->qarray[j].items[k] << endl;
+            }
+    }
+    _fo.close();
+    cout << "保存到读的信息保存成功！" << endl;
+}
+
 void saveinfo(QArray *var)
 {
     cout <<"正在保存信息···"<< endl;
@@ -214,6 +315,7 @@ void saveinfo(QArray *var)
     }
     fo.close();
     savequalldata(var);
+    savetoread(var);
     cout << "保存成功！" << endl;
 }
 
