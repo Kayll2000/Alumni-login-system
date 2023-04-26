@@ -250,9 +250,9 @@ void saveanswerinfo(Answer *vat ,QArray *var)
 }
 void savequalldata(QArray *var)
 {
-    if(_access("Debug/QuestionALLNUMData", 0) == -1)
+    if(_access("Debug/ALLNUMData", 0) == -1)
     {
-        _mkdir("Debug/QuestionALLNUMData");//创建QuestionALLNUMData文件夹,保存问卷个数以及每个问卷的选项个数
+        _mkdir("Debug/ALLNUMData");//ALLNUMData,保存问卷个数以及每个问卷的选项个数
     }
     ofstream qfo;
     qfo.open(QALLDATA,ios::out);//这里需要覆盖写入

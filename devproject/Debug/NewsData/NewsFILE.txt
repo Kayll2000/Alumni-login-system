@@ -1,5 +1,5 @@
 新闻ID[1]
-新闻标题：News Test
-新闻内容：This is a News test!
+新闻标题：test1
+新闻内容：this is test!
 作者：chen
-日期：2023.04.24
+日期：2023.04.26

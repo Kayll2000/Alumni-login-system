@@ -6,7 +6,7 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.25
+* @lmoddate:2023.04.26
 *           FUCTION:
                     1、添加新闻
                     2、删除新闻
@@ -21,6 +21,7 @@
                     1、[2023.04.10]修改菜单界面函数。
                     2、[2023.04.24]优化UI。
                     3、[2023.04.25]将文件保存发送改为追加写入（ios::app）。
+                    4、[2023.04.26]增加新闻数据的保存、读入、以及写入，添加新闻数据初始化API。
 
 ****************************************************************************************************************************/
 #include <iostream>
@@ -77,9 +78,138 @@ void GM::Show_menu()
     cout <<"---------------------[3] 修改新闻信息------------------------"<< endl;
     cout <<"---------------------[4] 查询新闻信息-----------------------"<< endl;
     cout <<"---------------------[5] 发布所有新闻信息-------------------"<< endl;
-    cout <<"---------------------[6] 退出当前新闻菜单-------------------"<< endl;
+    cout <<"---------------------[6] 初始化系统新闻数据------------------"<< endl;
+    cout <<"---------------------[7] 退出当前新闻菜单-------------------"<< endl;
     cout <<"-----------------------------------------------------------"<< endl;
     cout << endl;
+}
+
+void GM::Save_ToRead()
+{
+    if(_access("Debug", 0) == -1)
+    {
+        _mkdir("Debug");//创建Debug文件夹
+    }
+    if(_access("Debug/NewsData", 0) == -1)
+    {
+        _mkdir("Debug/NewsData");//创建NewsData文件夹
+    }
+    ofstream _fo;
+    _fo.open(NEWSFILETOREAD,ios::app);
+    /*
+    * 这样的格式保存，方便读取
+    */
+    for(int i = 0;i< newsnum; ++i)
+    {
+        _fo << this -> News_Array -> at(i) -> id << endl
+        << this -> News_Array -> at(i) -> title << endl
+        << this -> News_Array -> at(i) -> content <<endl
+        << this -> News_Array-> at(i) -> author <<endl
+        << this -> News_Array-> at(i) -> date << endl;
+    }
+    _fo.close();
+    cout << "保存到读的信息保存成功！" << endl;
+}
+
+void GM::Save_Nalldata()
+{
+    if(_access("Debug/ALLNUMData", 0) == -1)
+    {
+        _mkdir("Debug/ALLNUMData");//ALLNUMData,保存新闻个数以及每个news的选项个数
+    }
+    ofstream nfo;
+    nfo.open(NALLDATA,ios::out);//这里需要覆盖写入
+    nfo << newsnum << endl;//所有news数量
+    nfo.close();
+    cout << "数据存储成功！" << endl;
+}
+
+void GM::Read_NumData()//读取新闻信息——>>> 新闻总数
+{
+    ifstream infile(NALLDATA);
+    if (infile.good())
+    {
+        cout << "文件存在" << endl;
+        if (!infile.is_open()) {
+       cout << "Error opening file" << endl;
+       return;
+       }
+       if (infile.is_open()) {
+        string line; //保存读入的每一行
+        getline(infile,line);//line 是 新闻总数，还是string型的
+        readallnum = stoi(line);//将string 转为 int
+        cout << "读取的新闻总数："<< readallnum << "条" << endl;
+        infile.close();
+        } else {
+        cout << "Failed to open file for reading." << endl;
+        return;
+        }
+    }
+    else
+    {
+        cout << "文件不存在" << endl;
+    }
+}
+
+void GM::Init_NewsDate()
+{
+    Read_NumData();//先读取总新闻条数数据
+    ifstream infile(NEWSFILETOREAD);
+    if (infile.good())
+    {
+        cout << "文件存在" << endl;
+        newsnum = readallnum;//init NEWS总数
+        NDATA ndataarr[20];//存储最多新闻条数
+        if (infile.is_open()) {
+            string line;
+            int i = 0;
+        while (getline(infile, line)) {
+        if (i >= readallnum) {
+            break; // 结构体数组已满，退出循环
+        }
+        //read
+        for(i;i<readallnum;i++)//标题和id
+            {
+                int tt = stoi(line);
+
+                ndataarr[i].nid = tt;
+                getline(infile, line); // 读取下一行
+                ndataarr[i].ntitle = line;
+                getline(infile, line); // 读取下一行
+                ndataarr[i].ncontent = line;
+                getline(infile, line); // 读取下一行
+                ndataarr[i].nauthor= line;
+                getline(infile, line); // 读取下一行
+                ndataarr[i].ndate = line;
+                getline(infile, line); // 需要测试需不需要这段
+            }
+        //Init
+        for(int k = 0;k < readallnum;k++)
+        {
+            cout << "nid :" << ndataarr[k].nid << endl;
+            cout << "ntitle:" << ndataarr[k].ntitle << endl;
+            cout << "ncontent:" << ndataarr[k].ncontent << endl;
+            cout << "nauthor:" << ndataarr[k].nauthor << endl;
+            cout << "ndate:" << ndataarr[k].ndate << endl;
+
+            this -> News_Array -> at(i) -> id = ndataarr[k].nid;
+            this -> News_Array -> at(i) -> title = ndataarr[k].ntitle;
+            this -> News_Array -> at(i) -> content = ndataarr[k].ncontent;
+            this -> News_Array-> at(i) -> author = ndataarr[k].nauthor;
+            this -> News_Array-> at(i) -> date = ndataarr[k].ndate;
+        }
+        cout << "数据初始化成功！" << endl;
+
+    }
+        infile.close();
+        } else {
+        cout << "Failed to open file for reading." << endl;
+        return;
+        }
+    }else{
+        cout << "文件不存在！" << endl;
+    }
+
 }
 
 void GM::Save_Info()//保存新闻信息API
@@ -116,13 +246,14 @@ void GM::Save_Info()//保存新闻信息API
         << "Date" << this -> News_Array-> at(i) -> date << endl;
         */
         fo << "新闻ID[" << this -> News_Array -> at(i) -> id << "]" << endl
-        << "新闻标题：" <<this -> News_Array -> at(i) -> title << endl
+        << "新闻标题：" << this -> News_Array -> at(i) -> title << endl
         << "新闻内容：" << this -> News_Array -> at(i) -> content <<endl
         << "作者：" << this -> News_Array-> at(i) -> author <<endl
         << "日期：" << this -> News_Array-> at(i) -> date << endl;
-
     }
     fo.close();
+    Save_Nalldata();
+    Save_ToRead();
     cout << "保存成功！" << endl;
 }
 

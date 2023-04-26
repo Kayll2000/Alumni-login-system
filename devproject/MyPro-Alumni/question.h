@@ -9,7 +9,7 @@
 #define QUEFILENAME "./Debug/QuestionData/QuestionFILE.txt"//保存问卷信息的路径
 #define QUEFILETOREAD "./Debug/QuestionData/QuestionToRead.txt"//保存问卷信息(读的文件)的路径
 #define ANSWERFILE "./Debug/AnswerData/AnswerFILE.txt"//保存问卷答案路径
-#define QALLDATA "./Debug/QuestionALLNUMData/Qalldata.txt"//保存问卷个数以及选项个数路径
+#define QALLDATA "./Debug/ALLNUMData/Qalldata.txt"//保存问卷个数以及选项个数路径
 
 using namespace std;
 //全局变量
