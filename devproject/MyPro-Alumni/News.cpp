@@ -121,7 +121,7 @@ void GM::Save_Nalldata()
 {
     if(_access("Debug/ALLNUMData", 0) == -1)
     {
-        _mkdir("Debug/ALLNUMData");//ALLNUMData,保存新闻个数以及每个news的选项个数
+        _mkdir("Debug/ALLNUMData");//ALLNUMData,保存新闻个数
     }
     ofstream nfo;
     nfo.open(NALLDATA,ios::out);//这里需要覆盖写入

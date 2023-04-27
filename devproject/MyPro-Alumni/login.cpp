@@ -6,17 +6,21 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.26
+* @lmoddate:2023.04.27
 *           FUCTION:
                     1、校友登录入口
                     2、管理员登录入口&注册校友信息
             BUGFIX: 1、修复了当使用新闻或者问卷功能保存信息时，即Debug文件夹已经创建情况下，不会创建AlumniData文件夹来保存校友信息的bug。
+                    2、修复init能够被多次使用的bug，优化校友数据存储以及读取、初始化。
             MODIFY:
                     1、[2023.04.10]添加在菜单和问卷界面时主动退出当前菜单的选项
                     2、[2023.04.11]增加校友信息保存功能
                     3、[2023.04.25]将文件保存发送改为追加写入（ios::app）。
                     4、[2023.04.26]撤销测试的case项。
                     5、[2023.04.26]修改News的case项。
+                    6、[2023.04.27]增加校友信息保存并读取的功能，添加校友信息初始化API。
+            BUG:1、[2023.04.27]当运行程序时，首先执行添加校友信息后，再初始化数据，然后关闭程序，再读取的话，就会产生数据重复的bug。√
+                2、[2023.04.27]在使用初始化功能后再次使用初始化功能时，将重复写入，将init功能限制每次运行程序只能使用一次。√
 
 ****************************************************************************************************************************/
 #include <iostream>
@@ -31,6 +35,9 @@
 #include "news.h"
 #include "question.h"
 using namespace std;
+
+int alumninum = 0;
+ bool InitFlag = true;//init 的flag
 
 Alumni::Alumni(string name, string student_id, string password, string gender, string birthdate, string phone, string email) {
     this->name = name;
@@ -72,6 +79,49 @@ void Alumni::setPhone(string phone) {
 void Alumni::setEmail(string email) {
     this->email = email;
 }
+
+void AlumniManager::Save_Nalldata()
+{
+    if(_access("Debug/ALLNUMData", 0) == -1)
+    {
+        _mkdir("Debug/ALLNUMData");//ALLNUMData,保存校友个数
+    }
+    ofstream nfo;
+    nfo.open(AALLDATA,ios::out);//这里需要覆盖写入
+    nfo << alumninum << endl;//所有校友数量
+    nfo.close();
+    cout << "test 校友总数：" << alumninum << endl;
+    cout << "[校友总数]数据存储成功！" << endl;
+}
+
+void AlumniManager::Read_AlummiNumData()//读取校友总数
+{
+    ifstream fi(AALLDATA);
+    if (fi.good())
+    {
+        cout << "文件存在" << endl;
+        if (!fi.is_open()) {
+       cout << "Error opening file" << endl;
+       return;
+       }
+       if (fi.is_open()) {
+        string line; //保存读入的每一行
+        getline(fi,line);//line 是 新闻总数，还是string型的
+        alumninumread = stoi(line);//将string 转为 int
+        //alumninum = alumninumread;
+        cout << "读取的校友总数："<< alumninumread << "条" << endl;
+        fi.close();
+        } else {
+        cout << "Failed to open file for reading." << endl;
+        return;
+        }
+    }
+    else
+    {
+        cout << "文件不存在" << endl;
+    }
+}
+
 void AlumniManager::savealumniinfo(void){
     cout <<"正在保存信息···"<< endl;
     if(_access("Debug", 0) == -1)
@@ -95,14 +145,46 @@ void AlumniManager::savealumniinfo(void){
         << "邮箱：" << alumni_list[i].getEmail() << endl;
     }
     fo.close();
+    Save_Nalldata();
+    Read_AlummiNumData();
     cout << "请稍后···"  << endl;
     cout << "校友信息保存成功！" << endl;
+}
 
+void AlumniManager::SaveAlumni_ToRead()//保存以便读取的文件格式
+{
+    if(_access("Debug", 0) == -1)
+    {
+        _mkdir("Debug");//创建Debug文件夹
+    }
+    if(_access("Debug/AlumniData", 0) == -1)
+    {
+        _mkdir("Debug/AlumniData");//创建AlumniData文件夹
+    }
+    ofstream _fo;
+    _fo.open(ALUMNISAVETOREAD,ios::out);
+    /*
+    * 这样的格式保存，方便读取
+    */
+    for(int i=0;i<alumni_list.size();i++)
+    {
+        _fo  << alumni_list[i].getName() << endl
+         << alumni_list[i].getStudentId() << endl
+         << alumni_list[i].getPassword() << endl
+         << alumni_list[i].getGender() << endl
+         << alumni_list[i].getBirthdate() << endl
+         << alumni_list[i].getPhone() << endl
+         << alumni_list[i].getEmail() << endl;
+    }
+    _fo.close();
+    cout << "保存到读的信息保存成功！" << endl;
 }
 
 void AlumniManager::addAlumni(Alumni alumni) {
         alumni_list.push_back(alumni);
+        alumninum++;
         savealumniinfo();
+        SaveAlumni_ToRead();
     }
 bool AlumniManager::login(string student_id, string password) {
 for (int i = 0; i < alumni_list.size(); i++) {
@@ -134,17 +216,90 @@ void AlumniManager::modifyAlumni(Alumni alumni) {
         }
     }
     savealumniinfo();
+    SaveAlumni_ToRead();
 }
 
 void AlumniManager::deleteAlumni(string student_id) {
     for (int i = 0; i < alumni_list.size(); i++) {
         if (alumni_list[i].getStudentId() == student_id) {
             alumni_list.erase(alumni_list.begin() + i);
+            alumninum--;
+            savealumniinfo();
+            SaveAlumni_ToRead();
+            cout << "删除成功！" << endl;
             break;
+        }else {
+            cout << "该生不存在！" << endl;
         }
     }
-    savealumniinfo();
 }
+
+void AlumniManager::Init_AlumniDate()
+{
+    Read_AlummiNumData();//先读取校友总数
+    ifstream infile(ALUMNISAVETOREAD);
+    if (infile.good())
+    {
+        cout << "文件存在" << endl;
+        alumninum = alumninumread;//init alumni总数
+        cout << "alumninum :" << alumninum << endl;
+        ADATA adataarr[20];//存储最多的校友个数 后面改宏定义
+        if (infile.is_open()) {
+            string line;
+            int i = 0;
+        while (getline(infile, line)) {
+        if (i >= alumninumread) {
+            break; // 结构体数组已满，退出循环
+        }
+        //read
+        for(i;i<alumninumread;i++)//标题和id
+            {
+                adataarr[i]._name = line;
+                getline(infile, line); // 读取下一行
+                adataarr[i]._student_id = line;
+                getline(infile, line); // 读取下一行
+                adataarr[i]._password = line;
+                getline(infile, line); // 读取下一行
+                adataarr[i]._gender= line;
+                getline(infile, line); // 读取下一行
+                adataarr[i]._birthdate = line;
+                getline(infile, line);
+                adataarr[i]._phone= line;
+                getline(infile, line); // 读取下一行
+                adataarr[i]._email= line;
+                getline(infile, line); // 读取下一行
+            }
+        //Init
+        for(int k = 0;k < alumninumread;k++)
+        {
+            #if DEBUG
+            cout << "名字_name :" << adataarr[k]._name << endl;
+            cout << "学号_student_id:" << adataarr[k]._student_id << endl;
+            cout << "密码_password:" << adataarr[k]._password << endl;
+            cout << "性别_gender:" << adataarr[k]._gender << endl;
+            cout << "生日_birthdate:" << adataarr[k]._birthdate << endl;
+            cout << "电话_phone:" << adataarr[k]._phone << endl;
+            cout << "邮箱_email:" << adataarr[k]._email << endl;
+            #endif
+            Alumni alumni(adataarr[k]._name,adataarr[k]._student_id,adataarr[k]._password,adataarr[k]._gender, adataarr[k]._birthdate,adataarr[k]._phone,adataarr[k]._email);
+            alumni_list.push_back(alumni);
+            //addAlumni(alumni);  //这里直接调用addAlumni后会导致一直循环，因为addAlumni函数里面调用了SaveAlumni_ToRead()函数
+        }
+        //savealumniinfo();
+        cout << "数据初始化成功！" << endl;
+    }
+        infile.close();
+        } else {
+        cout << "Failed to open file for reading." << endl;
+        return;
+        }
+    }else{
+        cout << "文件不存在！" << endl;
+    }
+    system("pause");
+    system("cls");
+}
+
 
 Admin::Admin(string username, string password) {
     this->username = username;
@@ -170,6 +325,7 @@ bool AdminManager::login(string username, string password) {
 
 void AdminManager::addAdmin(Admin admin) {
     admin_list.push_back(admin);
+    //alumninum++;
 }
 
 void AdminManager::Newsfun()
