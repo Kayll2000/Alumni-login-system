@@ -209,10 +209,16 @@ void AdminManager::Newsfun()
                     gm.News_find();
                     break;
                 case 5:
-                    gm.News_show();
+                    gm.News_Publish();
                     break;
                 case 6:
+                    gm.News_show();
+                    break;
+                case 7:
                     gm.Init_NewsDate();
+                    break;
+                case 8:
+                    break;
                 default:
                     system("cls");
                     break;
@@ -300,7 +306,8 @@ void AdminManager::alumni_answerquestion()
 }
 void AdminManager::alumni_viewnews()
 {
-    gm.News_show();
+    //gm.News_show();
+    gm.News_PublishTosee();
     system("pause");
     system("cls");
 }

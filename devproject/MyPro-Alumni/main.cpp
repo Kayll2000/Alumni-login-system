@@ -6,7 +6,7 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.24
+* @lmoddate:2023.04.27
 * @compile:Compile the environment is Dev-C++(Embarcadero Dev-C++)
 *           FUCTION:
                     1、校友登录
@@ -25,6 +25,8 @@
 	                        2.7 退出登录
             BUGFIX:
             MODIFY:[2023.04.24]增加主函数登录界面输入的容错性，优化主界面，优化UI。
+                   [2023.04.27]优化登录界面。
+                   [2023.04.27]优化校友查看新闻信息功能。
 
 *
 ****************************************************************************************************************************/
@@ -72,6 +74,7 @@ int main()
             string student_id, password;
             cin >> student_id >> password;
             if (alumni_manager.login(student_id, password)) {
+                system("cls");
                 while (true) {
                     Alumni* alumni = alumni_manager.getAlumni(student_id);
                     cout << "欢迎您，" << alumni->getName() << "！" << endl;
@@ -142,6 +145,7 @@ int main()
             cin >> username >> password;
             
             if (admin_manager.login(username, password)) {
+                system("cls");
                 while (true) {
                     cout << "请选择操作：" << endl;
                     cout << "[1] 查看校友列表" << endl;
@@ -215,9 +219,11 @@ int main()
                         //goto here;
                            // cout << "test " << endl;
                        // }
+                       system("cls");
                         admin_manager.Newsfun();//新闻功能
                     }
                     else if(choice == 6){
+                    	system("cls");
                         admin_manager.questionfun();//问卷功能
                     }
                     else if (choice == 7) {

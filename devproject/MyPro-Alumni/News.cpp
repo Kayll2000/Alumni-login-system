@@ -6,7 +6,7 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.26
+* @lmoddate:2023.04.27
 *           FUCTION:
                     1、添加新闻
                     2、删除新闻
@@ -17,11 +17,14 @@
             BUGFIX:
                     1、[2023.04.11]修复新闻信息保存的文件夹创建错误的bug。
                     2、[2023.04.24]修复当使用问卷后再使用新闻功能时，即创建了Debug文件夹后，新闻功能将不会创建对应的文件夹NewsData的bug。
+                    3、[2023.04.27]修复新闻数据读取异常的bug。
             MODIFY:
                     1、[2023.04.10]修改菜单界面函数。
                     2、[2023.04.24]优化UI。
                     3、[2023.04.25]将文件保存发送改为追加写入（ios::app）。
                     4、[2023.04.26]增加新闻数据的保存、读入、以及写入，添加新闻数据初始化API。
+                    5、[2023.04.27]优化在新闻信息修改和删除过程中的保存机制，在id不存在下不执行保存信息操作。
+                    6、[2023.04.27]优化新闻发布功能，增加显示所有新闻信息选项。
 
 ****************************************************************************************************************************/
 #include <iostream>
@@ -34,6 +37,8 @@
 #include <cstdlib>
 #include "news.h"
 using namespace std;
+
+static PUBLISHDATA publish_arr[100];//最多容纳100条，后面改宏定义
 
 News::News(int _id,string _title,string _content,string _date,string _author)
 {
@@ -78,8 +83,9 @@ void GM::Show_menu()
     cout <<"---------------------[3] 修改新闻信息------------------------"<< endl;
     cout <<"---------------------[4] 查询新闻信息-----------------------"<< endl;
     cout <<"---------------------[5] 发布所有新闻信息-------------------"<< endl;
-    cout <<"---------------------[6] 初始化系统新闻数据------------------"<< endl;
-    cout <<"---------------------[7] 退出当前新闻菜单-------------------"<< endl;
+    cout <<"---------------------[6] 显示所有新闻信息------------------"<< endl;
+    cout <<"---------------------[7] 初始化系统新闻数据-----------------"<< endl;
+    cout <<"---------------------[8] 退出当前新闻菜单-------------------"<< endl;
     cout <<"-----------------------------------------------------------"<< endl;
     cout << endl;
 }
@@ -151,6 +157,44 @@ void GM::Read_NumData()//读取新闻信息——>>> 新闻总数
     }
 }
 
+void GM::Save_Publish()//CS
+{
+    for(int t = 0;t < newsnum;t++)
+    {
+        publish_arr[t].nid = this -> News_Array -> at(t) -> id;
+        publish_arr[t].ntitle =  this -> News_Array -> at(t) -> title;
+        publish_arr[t].ncontent = this -> News_Array -> at(t) -> content;
+        publish_arr[t].nauthor = News_Array-> at(t) -> author;
+        publish_arr[t].ndate = this -> News_Array-> at(t) -> date;
+        publishnum++;
+    }
+    cout <<"正在保存信息···"<< endl;
+    if(_access("Debug", 0) == -1)
+    {
+        _mkdir("Debug");//创建Debug文件夹
+    }
+    if(_access("Debug/NewsData", 0) == -1)
+    {
+        _mkdir("Debug/NewsData");//创建NewsData文件夹
+    }
+    //写入到文件
+    ofstream fo;
+    fo.open(NEWS_PUBLISHFILENAME,ios::app);//允许输出(写入操作)到流。
+    for(int i = 0;i < publishnum ;++i)
+    {
+
+        fo << "新闻ID[" << publish_arr[i].nid << "]" << endl
+        << "新闻标题：" << publish_arr[i].ntitle << endl
+        << "新闻内容：" << publish_arr[i].ncontent<<endl
+        <<    "作者："  <<  publish_arr[i].nauthor <<endl
+        <<   "日期："   << publish_arr[i].ndate << endl;
+    }
+    fo.close();
+    // Save_Nalldata();
+    // Save_ToRead();
+    cout << "已发布的新闻信息保存成功！" << endl;
+}
+
 void GM::Init_NewsDate()
 {
     Read_NumData();//先读取总新闻条数数据
@@ -191,12 +235,17 @@ void GM::Init_NewsDate()
             cout << "ncontent:" << ndataarr[k].ncontent << endl;
             cout << "nauthor:" << ndataarr[k].nauthor << endl;
             cout << "ndate:" << ndataarr[k].ndate << endl;
-
+            //ERROR   不能这样赋值，因为是vector，所以要使用push_back
+            /*bug
             this -> News_Array -> at(i) -> id = ndataarr[k].nid;
             this -> News_Array -> at(i) -> title = ndataarr[k].ntitle;
             this -> News_Array -> at(i) -> content = ndataarr[k].ncontent;
             this -> News_Array-> at(i) -> author = ndataarr[k].nauthor;
             this -> News_Array-> at(i) -> date = ndataarr[k].ndate;
+            */
+            News *tpnews = NULL;
+            tpnews = new News(ndataarr[k].nid,ndataarr[k].ntitle,ndataarr[k].ncontent,ndataarr[k].ndate, ndataarr[k].nauthor);
+            this->News_Array -> push_back(tpnews);//存进容器array中
         }
         cout << "数据初始化成功！" << endl;
 
@@ -209,7 +258,8 @@ void GM::Init_NewsDate()
     }else{
         cout << "文件不存在！" << endl;
     }
-
+    system("pause");
+    system("cls");
 }
 
 void GM::Save_Info()//保存新闻信息API
@@ -334,10 +384,10 @@ void GM::News_del()
     {
     this -> News_Array -> erase(this -> News_Array -> begin()+index);
     cout <<"删除成功！"<< endl;
+    this -> Save_Info();//保存信息
     }else{
     cout <<"新闻信息不存在，删除失败！"<< endl;
     }
-    this -> Save_Info();//保存信息
     system("pause");
     system("cls");
 }
@@ -368,8 +418,11 @@ void GM::News_mod()
         cin >> newauthor;
         _pnews = new  News(newid,newtitle,newcontent,newdate,newauthor);
         this -> News_Array -> at(index) = _pnews;
+        this -> Save_Info();//保存信息
+    }else{
+        cout << "此新闻id不存在！无法修改！" << endl;
     }
-    this -> Save_Info();//保存信息
+    
     system("pause");
     system("cls");
 }
@@ -386,6 +439,47 @@ void GM::News_find()
         this -> News_Array -> at(index) -> News_display();//显示信息
     }else{
         cout <<"ERROR!查无此条新闻！"<< endl;
+    }
+    system("pause");
+    system("cls");
+}
+
+void GM::News_Publish()
+{
+    if(newsnum != 0){
+        // PUBLISHDATA publish_arr[100];//最多容纳100条，后面改宏定义
+        Save_Publish();//保存发布的新闻
+        //cout <<"新闻总条数为：" << this -> News_Array -> size() << "条！" << endl;
+        cout <<"新闻条数为：" << newsnum << endl; //这个也可以显示新闻条数
+        cout << "发布的新闻信息如下>>>" << endl;
+        for(int i = 0;i < newsnum;++i)
+        {
+            cout <<"新闻编号："<<publish_arr[i].nid<<"\n新闻标题："
+            <<publish_arr[i].ntitle<<"\n新闻内容："
+            <<publish_arr[i].ncontent<<"\n新闻作者："<<publish_arr[i].nauthor << "\n新闻日期：" <<publish_arr[i].ndate <<endl;
+            cout << endl;
+        }
+    }else{
+        cout << "目前暂无新闻！>>>" << endl;
+    }
+    system("pause");
+    system("cls");
+}
+
+void GM::News_PublishTosee()
+{
+    if(publishnum != 0){
+        cout <<" 新闻条数为：" << publishnum << endl; //这个也可以显示新闻条数
+        cout << "发布的新闻信息如下>>>" << endl;
+        for(int i = 0;i < publishnum;++i)
+        {
+            cout <<"新闻编号："<<publish_arr[i].nid<<"\n新闻标题："
+            <<publish_arr[i].ntitle<<"\n新闻内容："
+            <<publish_arr[i].ncontent<<"\n新闻作者："<<publish_arr[i].nauthor << "\n新闻日期：" <<publish_arr[i].ndate <<endl;
+            cout << endl;
+        }
+    }else{
+        cout << "目前暂无新闻！>>>" << endl;
     }
     system("pause");
     system("cls");

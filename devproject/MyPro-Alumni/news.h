@@ -5,12 +5,14 @@
 #include <vector>
 using namespace std;
 #define FILENAME "./Debug/NewsData/NewsFILE.txt"    //保存为TXT文本格式
+#define NEWS_PUBLISHFILENAME "./Debug/NewsData/NewsPublishFILE.txt"    //已经发布的新闻
 #define NEWSFILETOREAD "./Debug/NewsData/NewsToRead.txt"//保存新闻信息(读的文件)的路径
 #define NALLDATA "./Debug/ALLNUMData/Nalldata.txt"//保存新闻总个数
 static int newsnum;//记录新闻总条数  static  
 static int readallnum = 0;//读的新闻总数
+static int publishnum = 0;//以及发布的新闻条数
 
-struct NDATA {//read
+struct NDATA {//read 用来读取新闻数据
     int nid;//read新闻编号
     string ntitle;//read新闻标题
     string ncontent;//read新闻内容
@@ -18,6 +20,14 @@ struct NDATA {//read
     string ndate;//read新闻日期
 };
 
+struct PUBLISHDATA {//publish  存储发布新闻
+    int nid;//read新闻编号
+    string ntitle;//read新闻标题
+    string ncontent;//read新闻内容
+    string nauthor;//read新闻作者
+    string ndate;//read新闻日期
+};
+// static PUBLISHDATA publish_arr[100];//最多容纳100条，后面改宏定义  放在这里定义会报错
 class News {//新闻类
 public:
     News(int _id,string _title,string _content,string _date,string _author);
@@ -39,13 +49,16 @@ public:
     void News_del();        //删除新闻信息
     void News_mod();        //修改新闻信息
     void News_find();       //查询指定编号的新闻信息
-    void News_show();       //显示新闻内容
+    void News_show();       //显示所有新闻信息
     void Save_Info();       //输出新闻信息到文件
     void Read_Data();       //读取新闻总数
     void Read_NumData();   //读取新闻总数
     void Save_Nalldata();   //保存新闻总数
     void Save_ToRead();     //保存新闻信息，方便读的格式保存
     void Init_NewsDate();   //初始化新闻数据
+    void Save_Publish();    //保存已经发布的新闻信息
+    void News_Publish();    //发布新闻信息
+    void News_PublishTosee();    //校友查看新闻接口
     vector<News*> *News_Array;
     ~GM();
 };

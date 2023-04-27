@@ -140,7 +140,6 @@ int main()
             cout << "请输入管理员账号和密码：" << endl;
             string username, password;
             cin >> username >> password;
-            
             if (admin_manager.login(username, password)) {
                 while (true) {
                     cout << "请选择操作：" << endl;
