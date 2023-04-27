@@ -7,7 +7,23 @@
 #include <vector>
 using namespace std;
 #define ALUMNIFILE "./Debug/AlumniData/AlumniFILE.txt"    //保存为TXT文本格式
+#define ALUMNISAVETOREAD "./Debug/AlumniData/AlumniSaveToreadFILE.txt"    //保存以便读取的文件
+#define AALLDATA "./Debug/ALLNUMData/Aalldata.txt"//保存校友总个数
+//static int alumninum;//校友总数
+extern int alumninum;//校友总数 extern全局，因为main需要使用。
+static int alumninumread = 0;//记录读取校友总条数  static 
+extern bool InitFlag;
 //"login.h"
+//存放读取的数据
+struct ADATA {//read 用来读取校友数据
+    string _name;        //姓名
+    string _student_id;  //学号
+    string _password;    //密码
+    string _gender;      //性别
+    string _birthdate;   //出生日期
+    string _phone;       //联系电话
+    string _email;       //电子邮件
+};
 //校友信息
 class Alumni {
 private:
@@ -46,6 +62,10 @@ public:
     void modifyAlumni(Alumni alumni);
     void deleteAlumni(string student_id);
     void savealumniinfo();
+    void SaveAlumni_ToRead();
+    void Save_Nalldata();
+    void Read_AlummiNumData();
+    void Init_AlumniDate();
 };
 
 class Admin {
