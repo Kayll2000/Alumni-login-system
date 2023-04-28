@@ -39,7 +39,7 @@
 #include "global.h"
 using namespace std;
 
-static PUBLISHDATA publish_arr[100];//最多容纳100条，后面改宏定义
+static PUBLISHDATA publish_arr[NEWSMAXSIZE];//最多容纳100条，后面改宏定义
 
 News::News(int _id,string _title,string _content,string _date,string _author)
 {
@@ -289,13 +289,6 @@ void GM::Save_Info()//保存新闻信息API
     fo.open(FILENAME,ios::app);//允许输出(写入操作)到流。
     for(int i = 0;i < this -> News_Array -> size();++i)
     {
-        /*
-        fo << "新闻ID[" << this -> News_Array -> at(i) -> id << "]" << endl
-        << "新闻Title:" <<this -> News_Array -> at(i) -> title << endl
-        << "新闻Content:" << this -> News_Array -> at(i) -> content <<endl
-        << "Author:" << this -> News_Array-> at(i) -> author <<endl
-        << "Date" << this -> News_Array-> at(i) -> date << endl;
-        */
         fo << "新闻ID[" << this -> News_Array -> at(i) -> id << "]" << endl
         << "新闻标题：" << this -> News_Array -> at(i) -> title << endl
         << "新闻内容：" << this -> News_Array -> at(i) -> content <<endl
@@ -312,7 +305,6 @@ int GM::IDIsExist(int id)
 {
     int _len = this -> News_Array -> size();//获取news信息容器存放的数量
     int index = -1;
-    //int _id = id - 1;
     for(int i = 0; i < _len; ++i)//遍历容器
     {
         if(this -> News_Array -> at(i) -> id == id)
@@ -450,7 +442,6 @@ void GM::News_Publish()
     if(newsnum != 0){
         // PUBLISHDATA publish_arr[100];//最多容纳100条，后面改宏定义
         Save_Publish();//保存发布的新闻
-        //cout <<"新闻总条数为：" << this -> News_Array -> size() << "条！" << endl;
         cout <<"新闻条数为：" << newsnum << endl; //这个也可以显示新闻条数
         cout << "发布的新闻信息如下>>>" << endl;
         for(int i = 0;i < newsnum;++i)

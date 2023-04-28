@@ -10,13 +10,16 @@ using namespace std;
 #define NEWS_PUBLISHFILENAME "./Debug/NewsData/NewsPublishFILE.txt"    //已经发布的新闻
 #define NEWSFILETOREAD "./Debug/NewsData/NewsToRead.txt"//保存新闻信息(读的文件)的路径
 #define NALLDATA "./Debug/ALLNUMData/Nalldata.txt"//保存新闻总个数
-#define MAX 100 //最多的问卷数
-#define MAXITEM 10//最多的选项个数
-#define DEBUG false//true
 #define QUEFILENAME "./Debug/QuestionData/QuestionFILE.txt"//保存问卷信息的路径
 #define QUEFILETOREAD "./Debug/QuestionData/QuestionToRead.txt"//保存问卷信息(读的文件)的路径
 #define ANSWERFILE "./Debug/AnswerData/AnswerFILE.txt"//保存问卷答案路径
 #define QALLDATA "./Debug/ALLNUMData/Qalldata.txt"//保存问卷个数以及选项个数路径
+
+#define MAX 100 //最多的问卷数
+#define MAXITEM 10//最多的选项个数
+#define DEBUG false//debug开关
+#define NEWSMAXSIZE 100
+
 
 extern int alumninum;//校友总数 extern全局，因为main需要使用。
 extern int alumninumread;//记录读取校友总条数  static 

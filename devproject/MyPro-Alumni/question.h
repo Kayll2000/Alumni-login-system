@@ -6,19 +6,6 @@
 #include "global.h"
 
 using namespace std;
-// #define MAX 100 //最多的问卷数
-// #define MAXITEM 10//最多的选项个数
-// #define DEBUG false//true
-// #define QUEFILENAME "./Debug/QuestionData/QuestionFILE.txt"//保存问卷信息的路径
-// #define QUEFILETOREAD "./Debug/QuestionData/QuestionToRead.txt"//保存问卷信息(读的文件)的路径
-// #define ANSWERFILE "./Debug/AnswerData/AnswerFILE.txt"//保存问卷答案路径
-// #define QALLDATA "./Debug/ALLNUMData/Qalldata.txt"//保存问卷个数以及选项个数路径
-//全局变量
-// static int num = 0;// 记录所有问卷的数量
-// static int pnum = 0;//记录已经发布问卷的数量
-// static int answerflag = 0;//记录已经填写的问卷个数
-// static int qdatanum = 0;//记录问卷总数，读取问卷时的总数
-// static vector<int> itemnum{};//记录每个问卷的选项数
 
 struct Questionnaire
 {

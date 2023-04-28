@@ -82,7 +82,6 @@ void readdata()//读取问卷信息——>>> 问卷总数 +  每条问卷对应�
         string line; //保存读入的每一行
         getline(infile,line);//line 是 问卷总数
         qdatanum = stoi(line);//问卷总数，将string 转为 int
-        //cout << "是否为数字："  << isdigit(qdatanum)  << endl;
         cout << "问卷总数："<< qdatanum << "条" << endl;
         while (infile >> tnum) {
            cout << "问卷[" << questid << "]" <<"的选项个数为" << tnum << endl; //debug
@@ -173,7 +172,6 @@ if(QuestionInitFlag){//只初始化一次
 }
 void showquestion(QArray *var)//显示所有问卷及选项
 {
-    //cout <<"qsize = " <<var->qsize << endl;//debug
     cout << endl;
     cout << "<<<所有问卷>>>" << endl;
     cout << "总问卷条数为：" << num << endl;

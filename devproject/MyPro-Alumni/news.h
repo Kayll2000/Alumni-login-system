@@ -6,14 +6,6 @@
 #include "global.h"
 using namespace std;
 
-// #define FILENAME "./Debug/NewsData/NewsFILE.txt"    //保存为TXT文本格式
-// #define NEWS_PUBLISHFILENAME "./Debug/NewsData/NewsPublishFILE.txt"    //已经发布的新闻
-// #define NEWSFILETOREAD "./Debug/NewsData/NewsToRead.txt"//保存新闻信息(读的文件)的路径
-// #define NALLDATA "./Debug/ALLNUMData/Nalldata.txt"//保存新闻总个数
-// static int newsnum;//记录新闻总条数  static  
-// static int readallnum = 0;//读的新闻总数
-// static int publishnum = 0;//以及发布的新闻条数
-
 struct NDATA {//read 用来读取新闻数据
     int nid;//read新闻编号
     string ntitle;//read新闻标题
@@ -29,7 +21,7 @@ struct PUBLISHDATA {//publish  存储发布新闻
     string nauthor;//read新闻作者
     string ndate;//read新闻日期
 };
-// static PUBLISHDATA publish_arr[100];//最多容纳100条，后面改宏定义  放在这里定义会报错
+
 class News {//新闻类
 public:
     News(int _id,string _title,string _content,string _date,string _author);
