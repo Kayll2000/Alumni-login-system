@@ -34,10 +34,12 @@
 #include "login.h"
 #include "news.h"
 #include "question.h"
+#include "global.h"
+
 using namespace std;
 
-int alumninum = 0;
- bool InitFlag = true;//init 的flag
+// int alumninum = 0;
+// bool InitFlag = true;//init 的flag
 
 Alumni::Alumni(string name, string student_id, string password, string gender, string birthdate, string phone, string email) {
     this->name = name;

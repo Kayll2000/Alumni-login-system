@@ -36,6 +36,7 @@
 #include<direct.h>
 #include <cstdlib>
 #include "news.h"
+#include "global.h"
 using namespace std;
 
 static PUBLISHDATA publish_arr[100];//最多容纳100条，后面改宏定义

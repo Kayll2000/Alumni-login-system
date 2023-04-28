@@ -41,6 +41,7 @@
 #include <typeinfo>
 #include <direct.h>
 #include "question.h"
+#include "global.h"
 
 using namespace std;
 
@@ -51,7 +52,7 @@ void showquestionmenu()
     cout << "******************[1] 增加问卷***************************" << endl;//ok
     cout << "******************[2] 删除问卷***************************" << endl;//ok
     cout << "******************[3] 修改问卷***************************" << endl;//ok
-     cout << "******************[4] 查询问卷***************************" << endl;//ok
+    cout << "******************[4] 查询问卷***************************" << endl;//ok
     cout << "******************[5] 显示所有问卷***********************" << endl;//ok
     cout << "******************[6] 显示已经发布的问卷*****************" << endl;//ok
     cout << "******************[7] 发布问卷***************************" << endl;//ok
@@ -101,6 +102,7 @@ void readdata()//读取问卷信息——>>> 问卷总数 +  每条问卷对应�
 }
 void questioninit(QArray *var)
 {
+if(QuestionInitFlag){//只初始化一次
     readdata();
     ifstream infile(QUEFILETOREAD);
     if (infile.good())
@@ -151,6 +153,7 @@ void questioninit(QArray *var)
             } 
         }
         cout << "数据初始化成功！" << endl;
+        QuestionInitFlag = false;
 
     }
         infile.close();
@@ -162,6 +165,11 @@ void questioninit(QArray *var)
     }else{
         cout << "文件不存在！" << endl;
     }
+}else{
+    cout << "系统问卷已经初始化！" << endl;
+}
+    system("pause");
+    system("cls");
 }
 void showquestion(QArray *var)//显示所有问卷及选项
 {

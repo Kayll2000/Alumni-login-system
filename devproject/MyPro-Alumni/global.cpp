@@ -14,8 +14,18 @@
 
 ****************************************************************************************************************************/
 #include <iostream>
-//#include "global.h"
-//extern newsnum = 0;//记录新闻条数  static 测试看是否需要
-//extern num = 0;// 记录所有问卷的数量
-//extern pnum = 0;//记录已经发布问卷的数量
-//extern answerflag = 0;//记录已经填写的问卷个数
+#include <vector>
+#include "global.h"
+
+int alumninum = 0;//校友总数 extern全局，因为main需要使用。
+int alumninumread = 0;//记录读取校友总条数   
+bool InitFlag = true;
+bool QuestionInitFlag = true;
+int newsnum = 0;//记录新闻总条数    
+int readallnum = 0;//读的新闻总数
+int publishnum = 0;//以及发布的新闻条数
+int num = 0;// 记录所有问卷的数量
+int pnum = 0;//记录已经发布问卷的数量
+int answerflag = 0;//记录已经填写的问卷个数
+int qdatanum = 0;//记录问卷总数，读取问卷时的总数
+vector<int> itemnum = {};//记录每个问卷的选项数 ——————》看怎么赋初值
