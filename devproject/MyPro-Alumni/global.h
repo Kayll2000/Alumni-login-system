@@ -30,8 +30,11 @@ extern int readallnum;//读的新闻总数
 extern int publishnum;//以及发布的新闻条数
 extern int num;// 记录所有问卷的数量
 extern int pnum;//记录已经发布问卷的数量
-extern int answerflag;//记录已经填写的问卷个数
+//extern int answerflag;//记录已经填写的问卷个数
 extern int qdatanum;//记录问卷总数，读取问卷时的总数
+extern int answerflag[MAX];//记录已经填写的问卷个数
+extern int answersave[MAX];//记录已经填写的问卷个数
+extern int stuid;//校友id标识
 extern vector<int> itemnum;//记录每个问卷的选项数
 
 #endif

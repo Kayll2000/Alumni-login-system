@@ -6,12 +6,13 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.27
+* @lmoddate:2023.05.08
 *           FUCTION:
                     1、校友登录入口
                     2、管理员登录入口&注册校友信息
             BUGFIX: 1、修复了当使用新闻或者问卷功能保存信息时，即Debug文件夹已经创建情况下，不会创建AlumniData文件夹来保存校友信息的bug。
                     2、修复init能够被多次使用的bug，优化校友数据存储以及读取、初始化。
+                    3、[2023.05.08]修复多个校友同时填写问卷时只能填写一次的bug。
             MODIFY:
                     1、[2023.04.10]添加在菜单和问卷界面时主动退出当前菜单的选项
                     2、[2023.04.11]增加校友信息保存功能
@@ -19,6 +20,7 @@
                     4、[2023.04.26]撤销测试的case项。
                     5、[2023.04.26]修改News的case项。
                     6、[2023.04.27]增加校友信息保存并读取的功能，添加校友信息初始化API。
+                    
             BUG:1、[2023.04.27]当运行程序时，首先执行添加校友信息后，再初始化数据，然后关闭程序，再读取的话，就会产生数据重复的bug。√
                 2、[2023.04.27]在使用初始化功能后再次使用初始化功能时，将重复写入，将init功能限制每次运行程序只能使用一次。√
 
@@ -41,7 +43,7 @@ using namespace std;
 // int alumninum = 0;
 // bool InitFlag = true;//init 的flag
 
-Alumni::Alumni(string name, string student_id, string password, string gender, string birthdate, string phone, string email) {
+Alumni::Alumni(string name, string student_id, string password, string gender, string birthdate, string phone, string email,int flagid) {
     this->name = name;
     this->student_id = student_id;
     this->password = password;
@@ -49,6 +51,7 @@ Alumni::Alumni(string name, string student_id, string password, string gender, s
     this->birthdate = birthdate;
     this->phone = phone;
     this->email = email;
+    this->flagid = flagid;
 }
 string Alumni::getName() {
     return name;
@@ -70,6 +73,9 @@ string Alumni::getPhone() {
 }
 string Alumni::getEmail() {
     return email;
+}
+int Alumni::getFlagid() {
+    return flagid;
 }
 
 void Alumni::setPassword(string password) {
@@ -238,6 +244,7 @@ void AlumniManager::deleteAlumni(string student_id) {
 
 void AlumniManager::Init_AlumniDate()
 {
+	int init_id = 0;
     Read_AlummiNumData();//先读取校友总数
     ifstream infile(ALUMNISAVETOREAD);
     if (infile.good())
@@ -272,7 +279,7 @@ void AlumniManager::Init_AlumniDate()
                 getline(infile, line); // 读取下一行
             }
         //Init
-        for(int k = 0;k < alumninumread;k++)
+        for(int k = 0;k < alumninumread;k++,init_id++)
         {
             #if DEBUG
             cout << "名字_name :" << adataarr[k]._name << endl;
@@ -283,7 +290,7 @@ void AlumniManager::Init_AlumniDate()
             cout << "电话_phone:" << adataarr[k]._phone << endl;
             cout << "邮箱_email:" << adataarr[k]._email << endl;
             #endif
-            Alumni alumni(adataarr[k]._name,adataarr[k]._student_id,adataarr[k]._password,adataarr[k]._gender, adataarr[k]._birthdate,adataarr[k]._phone,adataarr[k]._email);
+            Alumni alumni(adataarr[k]._name,adataarr[k]._student_id,adataarr[k]._password,adataarr[k]._gender, adataarr[k]._birthdate,adataarr[k]._phone,adataarr[k]._email,init_id);
             alumni_list.push_back(alumni);
             //addAlumni(alumni);  //这里直接调用addAlumni后会导致一直循环，因为addAlumni函数里面调用了SaveAlumni_ToRead()函数
         }
@@ -430,7 +437,7 @@ void AdminManager::questionfun()
         case 6:showpublish(&var);break;//显示已经发布的问卷
         case 7:publish(&var);break;//发布问卷
         case 8:collectanswer(&vat);break;//collectanswer();break;//收集问卷答案【在校友角色中去调用问卷填写并将答案存在answer结构体中】
-        case 9:useranswer(&var,&vat);break;
+        case 9:cout << "该功能模块不可用！" << endl;//useranswer(&var,&vat);break;
         case 10:clearpublished(&var);break;//清空已经发布的额问卷
         case 11:clearallquestion(&var);break;//清空所有问卷
         case 12:system("cls");break;//清屏操作
@@ -456,9 +463,11 @@ void AdminManager::questionfun()
     }
 }
 
-void AdminManager::alumni_answerquestion()
+void AdminManager::alumni_answerquestion(int temp,string name)
 {
-    useranswer(&var,&vat);
+    int t_id = temp;
+    string t_name = name;
+    useranswer(&var,&vat,t_id,t_name);
     system("pause");
     system("cls");
 }

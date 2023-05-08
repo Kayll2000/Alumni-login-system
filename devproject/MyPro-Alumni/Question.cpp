@@ -6,7 +6,7 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.26
+* @lmoddate:2023.05.08
 *           FUCTION:
                     1、添加问卷
                     2、删除问卷
@@ -23,6 +23,7 @@
                     2、[2023.04.24]修复查询1号问卷时内容为空，当有2个及以上问卷时，查询1号问卷显示的是后一个问卷内容的bug。
                     3、[2023.04.24]修复当使用新闻后再使用问卷功能时，即创建了Debug文件夹后，新闻功能将不会创建对应的文件夹QuestionData的bug。
                     4、[2023.04.26]修复读取问卷数据报错的bug。
+                    5、[2023.05.08]修复多个校友同时填写问卷时只能填写一次的bug。
             MODIFY: 1、[2023.04.06]添加查询指定id问卷功能
                     2、[2023.04.10]修改菜单界面函数
                     3、[2023.04.24]优化UI。
@@ -173,10 +174,11 @@ if(QuestionInitFlag){//只初始化一次
 void showquestion(QArray *var)//显示所有问卷及选项
 {
     cout << endl;
-    cout << "<<<所有问卷>>>" << endl;
+    
     cout << "总问卷条数为：" << num << endl;
     if(num > 0)
     {
+        cout << "<<<所有问卷>>>" << endl;
         // for(int i = 0;i<var->qsize;i++)
         for(int i = 0;i<num;i++)
         {
@@ -230,8 +232,10 @@ int Ispublish(QArray *var,int id)//问卷id是否已经发布  未发布返回id
     return -1;
 }
 
-void saveanswerinfo(Answer *vat ,QArray *var)
+void saveanswerinfo(Answer *vat ,QArray *var,int temp,string name)
 {
+    int t_id = temp;
+    string t_name = name;
     cout << "正在保存答案信息···" << endl;
     if(_access("AnswerData", 0) == -1)
     {
@@ -239,7 +243,8 @@ void saveanswerinfo(Answer *vat ,QArray *var)
     }
     ofstream fo;
     fo.open(ANSWERFILE,ios::app);
-    for(int i=0;i<answerflag;i++)
+        fo << "填写人[" << t_name << "]" << endl;
+    for(int i=answersave[t_id];i<answerflag[t_id];i++)
     {
         fo << "问卷ID[" << i+1 << "]" << endl
         << "问卷标题{" << var->parray[i].title << "}" << endl;
@@ -252,6 +257,7 @@ void saveanswerinfo(Answer *vat ,QArray *var)
         fo << endl;
     }
     fo.close();
+    answersave[t_id]++;
     cout << "保存成功！" << endl;
 }
 void savequalldata(QArray *var)
@@ -533,12 +539,15 @@ void showpublish(QArray *var)
     system("pause");
     system("cls");
 }
-void useranswer(QArray *var,Answer *vat)//用户回答问卷
+void useranswer(QArray *var,Answer *vat,int temp,string name)//用户回答问卷
 {
     int myselect,itemsize;
+    int stu_id = temp;
+    string stu_name = name;
     bool writeflag = false;
-
-    for(int i = answerflag;i<pnum;i++)
+    cout << "stu_id:" << stu_id << endl;//debug
+    cout << "stu_name" << stu_name << endl;//debug
+    for(int i = answerflag[stu_id];i<pnum;i++)
     {
         cout << "问卷编号[" << var->parray[i].id << "]" << endl;
         cout << "问卷标题：" << var->parray[i].title << endl;
@@ -561,26 +570,29 @@ void useranswer(QArray *var,Answer *vat)//用户回答问卷
         // vat->answerarr[i].results.push_back(myselect);
         vat->results.push_back(myselect);
         vat->asize++;
-        answerflag++;
+        answerflag[stu_id]++;
         writeflag = true;
+        saveanswerinfo(vat,var,stu_id,stu_name);//保存用户答案
         cout << "写入成功！" << endl;
     }
     if(writeflag != true)
     {
         cout << "问卷已经全部填写完毕！或者 问卷未发布！" << endl;
     }
-    saveanswerinfo(vat,var);//保存用户答案
         system("pause");
         system("cls");
 
 }
 void collectanswer(Answer *vat)
 {
-    //cout << "收集问卷答案test!" << endl;
+    int size = sizeof(answerflag) / sizeof(answerflag[0]);
     cout << "问卷填写数量：" << vat->asize << endl;
-    for(int i = 0;i < answerflag;i++)
+    for(int j = 0;j <size;j++)
     {
-        cout <<"id["<< i+1 <<"] 的问卷答案为：" << vat->results[i] << endl;
+        for(int i = 0;i < answerflag[j];i++)
+        {
+            cout <<"id["<< i+1 <<"] 的问卷答案为：" << vat->results[i] << endl;
+        }
     }
     system("pause");
     system("cls");

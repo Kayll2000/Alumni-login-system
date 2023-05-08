@@ -22,6 +22,7 @@ struct ADATA {//read 用来读取校友数据
 //校友信息
 class Alumni {
 private:
+	int flagid;//id标识
     string name;        //姓名
     string student_id;  //学号
     string password;    //密码
@@ -30,7 +31,7 @@ private:
     string phone;       //联系电话
     string email;       //电子邮件
 public:
-    Alumni(string name, string student_id, string password, string gender, string birthdate, string phone, string email);
+Alumni(string name, string student_id, string password, string gender, string birthdate, string phone, string email,int flagid);
     string getName();
     string getStudentId();
     string getPassword();
@@ -38,6 +39,7 @@ public:
     string getBirthdate();
     string getPhone();
     string getEmail();
+    int getFlagid();
 
     void setPassword(string password);
     void setPhone(string phone);
@@ -86,7 +88,7 @@ public:
     bool login(string username, string password);
     void Newsfun();
     void questionfun();
-    void alumni_answerquestion();
+    void alumni_answerquestion(int temp,string name);
     void alumni_viewnews();
 };
 
