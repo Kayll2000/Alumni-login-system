@@ -82,7 +82,7 @@ public:
     //AdminManager() {}
     GM gm;
     QArray var;//实例化问卷对象
-    Answer vat;//实例化答案对象
+    Collect vac;//实例化收集/答案对象
     AdminManager():gm() {}
     void addAdmin(Admin admin);
     bool login(string username, string password);

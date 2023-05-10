@@ -101,11 +101,9 @@ void core()
                     else if (choice == 3){
                         int temp = alumni->getFlagid();
                         string tname = alumni->getName();
-                        //alumni_manager.answerquestion(&var,&vat);//校友回答问卷
                         admin_manager.alumni_answerquestion(temp,tname);
                     }
                     else if (choice == 4){
-                        //alumni_manager.viewnews(gm);//校友查看新闻
                         admin_manager.alumni_viewnews();
                     }
                     else if (choice == 5) {

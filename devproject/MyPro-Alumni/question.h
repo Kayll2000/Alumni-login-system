@@ -25,10 +25,10 @@ struct QArray
 
 struct Answer
 {
-    Questionnaire answerarr[MAX];//答案
+    string stus; //填卷人
+    //Questionnaire answerarr[MAX];//答案
     vector<int> results;  // 选项结果
     int asize;
-    // string content;//填写问卷答案内容
 };
 
 struct QDATA {//read
@@ -37,12 +37,17 @@ struct QDATA {//read
     vector<string> reitem;
 };
 
+struct Collect
+{
+    Answer collectarr[20];//每个校友 后改宏 设置20个校友为上限
+    int csize;
+};
+
 extern void showquestionmenu();
 extern void showquestion(QArray *var);
 extern int IsidExit(QArray *var,int id);
 extern int Ispublish(QArray *var,int id);
-//extern void saveanswerinfo(Answer *vat ,QArray *var);
-extern void saveanswerinfo(Answer *vat ,QArray *var,int temp,string name);
+extern void saveanswerinfo(Collect *vac ,QArray *var,int temp,string name);
 extern void saveinfo(QArray *var);
 extern void clearallquestion(QArray *var);
 extern void clearpublished(QArray *var);
@@ -51,9 +56,8 @@ extern void addquestion(QArray *var);
 extern void delquestion(QArray *var);
 extern void modquestion(QArray *var);
 extern void showpublish(QArray *var);
-//extern void useranswer(QArray *var,Answer *vat);
-extern void useranswer(QArray *var,Answer *vat,int temp,string name) ;//用户回答问卷
-extern void collectanswer(Answer *vat);
+extern void useranswer(QArray *var,Collect *vac,int temp,string name) ;//用户回答问卷
+extern void collectanswer(Collect *vac);
 extern void searchquestion(QArray *var);
 extern  void readdata();
 extern void questioninit(QArray *var);

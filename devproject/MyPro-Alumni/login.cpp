@@ -6,7 +6,7 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.05.08
+* @lmoddate:2023.05.10
 *           FUCTION:
                     1、校友登录入口
                     2、管理员登录入口&注册校友信息
@@ -20,6 +20,7 @@
                     4、[2023.04.26]撤销测试的case项。
                     5、[2023.04.26]修改News的case项。
                     6、[2023.04.27]增加校友信息保存并读取的功能，添加校友信息初始化API。
+                    7、[2023.05.10]去除问卷和新闻功能模块中，在操作后一直弹出“是否退出当前菜单”的提示信息。
                     
             BUG:1、[2023.04.27]当运行程序时，首先执行添加校友信息后，再初始化数据，然后关闭程序，再读取的话，就会产生数据重复的bug。√
                 2、[2023.04.27]在使用初始化功能后再次使用初始化功能时，将重复写入，将init功能限制每次运行程序只能使用一次。√
@@ -388,21 +389,17 @@ void AdminManager::Newsfun()
                     system("cls");
                     break;
             }
-            if(quit != false)
-            {
+            if(quit == true){
+                cout << "是否退出当前新闻(News)菜单[Y/N]" << endl;
+                cin >> exitflag;
+                if(exitflag == "Y" || exitflag == "y"){
                 system("pause");
                 system("cls");
                 break;
             }else{
-                cout << "是否退出当前新闻(News)菜单[Y/N]" << endl;
-                cin >> exitflag;
-                if(exitflag == "Y" || exitflag == "y"){
-
-                    system("pause");
-                    system("cls");
-                    break;
-                 }
+                system("cls");
             }
+    }
         }
 }
 
@@ -412,7 +409,7 @@ void AdminManager::questionfun()
     bool quit = false;
     string exitflag = "";
     var.qsize = 0;//初始化为 0
-    vat.asize = 0;
+    vac.csize = 0;
     while(true)
     {
     showquestionmenu();
@@ -436,8 +433,8 @@ void AdminManager::questionfun()
         case 5:showquestion(&var);break;//显示所有问卷
         case 6:showpublish(&var);break;//显示已经发布的问卷
         case 7:publish(&var);break;//发布问卷
-        case 8:collectanswer(&vat);break;//collectanswer();break;//收集问卷答案【在校友角色中去调用问卷填写并将答案存在answer结构体中】
-        case 9:cout << "该功能模块不可用！" << endl;//useranswer(&var,&vat);break;
+        case 8:collectanswer(&vac);break;//collectanswer();break;//收集问卷答案【在校友角色中去调用问卷填写并将答案存在answer结构体中】
+        case 9:cout << "该功能模块不可用！" << endl;
         case 10:clearpublished(&var);break;//清空已经发布的额问卷
         case 11:clearallquestion(&var);break;//清空所有问卷
         case 12:system("cls");break;//清屏操作
@@ -445,19 +442,15 @@ void AdminManager::questionfun()
         case 14:questioninit(&var);break;//初始化数据
         default:system("cls");break;//清屏操作
     }
-    if(quit != false)
-    {
-        system("pause");
-        system("cls");
-        break;
-
-    }else{
+    if(quit == true){
         cout << "是否退出当前问卷(Question)菜单[Y/N]" << endl;
         cin >> exitflag;
         if(exitflag == "Y" || exitflag == "y"){
             system("pause");
             system("cls");
             break;
+        }else{
+            system("cls");
         }
     }
     }
@@ -467,14 +460,14 @@ void AdminManager::alumni_answerquestion(int temp,string name)
 {
     int t_id = temp;
     string t_name = name;
-    useranswer(&var,&vat,t_id,t_name);
-    system("pause");
-    system("cls");
+    useranswer(&var,&vac,t_id,t_name);
+    // system("pause");
+    // system("cls");
 }
 void AdminManager::alumni_viewnews()
 {
     //gm.News_show();
     gm.News_PublishTosee();
-    system("pause");
-    system("cls");
+    // system("pause");
+    // system("cls");
 }
