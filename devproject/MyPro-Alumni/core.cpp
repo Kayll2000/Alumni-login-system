@@ -11,6 +11,8 @@
                     1、存放程序的核心代码、函数。
             BUGFIX:
             MODIFY:
+                    1、[2023.05.11]增加退出系统选项功能。
+                    2、[2023.05.11]增加校友查看他人信息时，信息不存在的提示信息。
 
 ****************************************************************************************************************************/
 
@@ -22,6 +24,7 @@
 #include <io.h>
 #include<direct.h> 
 #include <list>
+#include <cstdlib>
 #include "login.h"
 #include "core.h"
 
@@ -41,6 +44,7 @@ void core()
         cout << ">>> 请选择登录身份 >>>" << endl;
         cout << ">>> 1. 校友 >>>"  << endl;
         cout << ">>> 2. 管理员 >>>" << endl;
+        cout << ">>> 3. 退出系统 >>>" << endl;
         cout << ">>>>>>>>>>>>>>>>>>>>>>>>" << endl;
         int choice;
         cin >> choice;
@@ -83,7 +87,10 @@ void core()
                     else if (choice == 2) {
                         vector<Alumni> alumni_list = alumni_manager.getAlumniList();
                         cout << "<<校友总数>> " << alumninum << endl;
-                        
+                        if(alumni_list.size() == 1)
+                        {
+                            cout << "暂无信息！" << endl;
+                        }
                         for (int i = 0; i < alumni_list.size(); i++) {
                             if (alumni_list[i].getStudentId() != student_id) {
                                 cout << "姓名：" << alumni_list[i].getName() << endl;
@@ -247,6 +254,10 @@ void core()
                 system("pause");
                 system("cls");
             }
+        }
+        else if (choice =3) {
+            cout << "欢迎您的使用！" << endl;
+            exit(0);
         }
         else {
             cout << "输入有误，请重新输入！" << endl;
