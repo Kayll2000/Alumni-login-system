@@ -6,13 +6,14 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.05.08
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.05.08
+* @lmoddate:2023.05.15
 *           FUCTION:
                     1、存放程序的核心代码、函数。
             BUGFIX:
             MODIFY:
                     1、[2023.05.11]增加退出系统选项功能。
                     2、[2023.05.11]增加校友查看他人信息时，信息不存在的提示信息。
+                    3、[2023.05.15]增加逐字输出问候功能。
 
 ****************************************************************************************************************************/
 
@@ -25,6 +26,8 @@
 #include<direct.h> 
 #include <list>
 #include <cstdlib>
+#include <chrono>
+#include <thread>
 #include "login.h"
 #include "core.h"
 
@@ -265,4 +268,22 @@ void core()
             system("cls");
         }
     }
+}
+
+// 逐字输出文字
+void PrintCharByChar(string s, int delay) {
+    for (int i = 0; i < s.size(); i++) {
+        cout << s[i];
+        cout.flush();
+        this_thread::sleep_for(chrono::milliseconds(delay)); // 延时
+    }
+}
+
+//初始化
+void Init(void)
+{
+    string s = "欢迎使用GCU校友管理系统!";
+    int delay = 100; // 每个字符输出后延时的时间（单位为毫秒）
+    PrintCharByChar(s, delay);
+    cout << endl;
 }

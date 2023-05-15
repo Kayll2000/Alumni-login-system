@@ -6,7 +6,7 @@
 * @github:https://github.com/Kayll2000/Alumni-login-system.git
 * @date:2023.04.06
 * @lmodauthor:chenjunlong
-* @lmoddate:2023.04.27
+* @lmoddate:2023.05.15
 * @compile:Compile the environment is Dev-C++(Embarcadero Dev-C++)
 *           FUCTION:
                     1、校友登录
@@ -27,6 +27,7 @@
             MODIFY:[2023.04.24]增加主函数登录界面输入的容错性，优化主界面，优化UI。
                    [2023.04.27]优化登录界面。
                    [2023.04.27]优化校友查看新闻信息功能。
+				   [2023.05.15]增加逐字输出问候功能。
 
 *
 ****************************************************************************************************************************/
@@ -45,6 +46,7 @@ using namespace std;
 //int main(int argc, char** argv)
 int main() 
 {
+	Init();
     core();
     return 0;
 }
